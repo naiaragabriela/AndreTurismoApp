@@ -8,38 +8,50 @@ namespace AndreTurismoApp.Models
 {
     public class Client
     {
-        #region Constant
-        public static readonly string INSERT = "INSERT INTO CLIENT (Name, Phone, DtRegistration, IdAddress) " +
-                    "VALUES (@Name, @Phone, @DtRegistration,@IdAddress); select cast(scope_identity() as int)";
+            #region Constant
+            public readonly static string INSERT = "INSERT INTO CLIENT (Name, Phone, DtRegistration, IdAddress) " +
+                        "VALUES (@Name, @Phone, @DtRegistration,@IdAddress); select cast(scope_identity() as int)";
 
 
 
-        public static readonly string SELECT = "SELECT[Client].[Id] AS Id, [Name], [Phone],[Client].[DtRegistration],[AddressClient].[Id] AS SplitAddress," +
-          "[AddressClient].[Id] AS Id, [Street],[Number],[Neighborhood],[PostalCode],[Complement],[AddressClient].[DtRegistration]," +
-          "[AddressCity].[Id] AS SplitCity, [AddressCity].[Id] AS Id, [AddressCity].[NameCity], [AddressCity].[DtRegistration] " +
-           "FROM[Client] JOIN[Address] AddressClient ON IdAddress = AddressClient.Id " +
-           "JOIN[City] AddressCity ON AddressClient.IdCity= AddressCity.Id";
+            public readonly static string SELECT = "SELECT[Client].[Id] AS Id, [Name], [Phone],[Client].[DtRegistration],[AddressClient].[Id] AS SplitAddress," +
+              "[AddressClient].[Id] AS Id, [Street],[Number],[Neighborhood],[PostalCode],[Complement],[AddressClient].[DtRegistration]," +
+              "[AddressCity].[Id] AS SplitCity, [AddressCity].[Id] AS Id, [AddressCity].[NameCity], [AddressCity].[DtRegistration] " +
+               "FROM[Client] JOIN[Address] AddressClient ON IdAddress = AddressClient.Id " +
+               "JOIN[City] AddressCity ON AddressClient.IdCity= AddressCity.Id";
 
 
-        public static readonly string UPDATE = "UPDATE CLIENT SET " +
-                                               "Name = @Name," +
-                                               "Phone = @Phone," +
-                                               "Address= IdAddress " +
-                                              " WHERE Id = @id";
+            public readonly static string UPDATE = "UPDATE CLIENT SET " +
+                                                   "Name = @Name," +
+                                                   "Phone = @Phone," +
+                                                   "Address= IdAddress " +
+                                                  " WHERE Id = @id";
 
 
-        public static readonly string DELETE = "DELETE FROM CLIENT WHERE id =@id";
+            public readonly static string DELETE = "DELETE FROM CLIENT WHERE id =@id";
 
-        #endregion
+            #endregion
 
-        #region Properties
+            #region Properties
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Phone { get; set; }
-        public Address Address { get; set; }
-        public DateTime DtRegistration { get; set; }
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Phone { get; set; }
+            public Address Address { get; set; }
+            public DateTime DtRegistration { get; set; }
 
-        #endregion
+            #endregion
+
+            #region Methods
+            public override string ToString()
+            {
+                return "Id do Cliente: " + Id +
+                       "\nNome: " + Name +
+                       "\nPhone: " + Phone +
+                       "\nData de Registro do Cliente: " + DtRegistration +
+                       "\nEndereço: " + Address.ToString();
+            }
+            #endregion
     }
+    
 }
