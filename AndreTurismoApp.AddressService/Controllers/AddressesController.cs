@@ -97,7 +97,6 @@ namespace AndreTurismoApp.AddressService.Controllers
 
             var post = PostOfficesService.GetAddress(cep).Result;
 
-            
             Address address = new Address()
             {
                 Street = post.Street,
@@ -105,7 +104,6 @@ namespace AndreTurismoApp.AddressService.Controllers
                 PostalCode = cep,
                 City = new City()
                 {
-                    
                     NameCity = post.City,
                 }
             };
