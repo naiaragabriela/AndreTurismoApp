@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using AndreTurismoApp.AddressService.Data;
 using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
+using Newtonsoft.Json;
+using AndreTurismoApp.Models.DTO;
 
 namespace AndreTurismoApp.AddressService.Controllers
 {
@@ -26,10 +28,10 @@ namespace AndreTurismoApp.AddressService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Address>>> GetAddress()
         {
-          if (_context.Address == null)
-          {
-              return NotFound();
-          }
+            if (_context.Address == null)
+            {
+                return NotFound();
+            }
             return await _context.Address.ToListAsync();
         }
 
@@ -37,10 +39,10 @@ namespace AndreTurismoApp.AddressService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Address>> GetAddress(int id)
         {
-          if (_context.Address == null)
-          {
-              return NotFound();
-          }
+            if (_context.Address == null)
+            {
+                return NotFound();
+            }
             var address = await _context.Address.FindAsync(id);
 
             if (address == null)
@@ -85,19 +87,34 @@ namespace AndreTurismoApp.AddressService.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost()]
-        public async Task<ActionResult<Address>> PostAddress(Address address)
+        public async Task<ActionResult<Address>> PostAddress(string cep, int number)
         {
-          if (_context.Address == null)
-          {
-              return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
-          }
-            var post = PostOfficesService.GetAddress(address.PostalCode).Result;
+            if (_context.Address == null)
+            {
+                return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
+            }
 
 
-            _context.Address.Add(address);
+            var post = PostOfficesService.GetAddress(cep).Result;
+
+            /*
+            Address newAddress = new Address()
+            {
+                newAddress.Street = post.Lograduro,
+                newAddress.Number = number,
+                newAddress.PostalCode = cep,
+                newAddress.City = new City()
+                {
+                    city.NameCity = post.City,
+                }
+
+
+            };
+            */
+          //  _context.Address.Add(address);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            return CreatedAtAction("GetAddress",// new { id = address.Id }, address);
         }
 
         // DELETE: api/Addresses/5
