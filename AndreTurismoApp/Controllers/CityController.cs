@@ -10,12 +10,10 @@ namespace AndreTurismoApp.Controllers
     public class CityController : ControllerBase
     {
         private CityService _cityService;
-
-        public CityController(CityService cityService)
+        public CityController()
         {
             _cityService = new CityService();
         }
-
 
         [HttpPost( Name = "InsertCity")]
         public int Add(City city)
@@ -23,7 +21,7 @@ namespace AndreTurismoApp.Controllers
             return _cityService.Add(city);
         }
 
-        [HttpGet(Name = "GetAll")]
+        [HttpGet(Name = "GetAllCity")]
         public List<City> GetAll()
         {
             return _cityService.GetAll();

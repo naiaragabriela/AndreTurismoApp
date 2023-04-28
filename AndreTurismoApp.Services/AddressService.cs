@@ -32,9 +32,9 @@ namespace AndreTurismoApp.Services
             return _addressRepository.Update(address);
         }
 
-        public bool Delete(Address address)
+        public bool Delete(int id)
         {
-            return _addressRepository.Delete(address);
+            return _addressRepository.Delete(id);
         }
 
     }

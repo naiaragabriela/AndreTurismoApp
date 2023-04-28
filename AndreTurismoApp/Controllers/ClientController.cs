@@ -16,24 +16,26 @@ namespace AndreTurismoApp.Controllers
             _clientService = new ClientService();
         }
 
-        [HttpPost(Name = "InsertAddress")]
+        [HttpPost(Name = "InsertClient")]
         public int Add(Client client)
         {
             return _clientService.Add(client);
         }
 
-        [HttpGet(Name = "GetAllAddress")]
+        [HttpGet(Name = "GetAllClient")]
         public List<Client> GetAll()
         {
             return _clientService.GetAll();
         }
 
-        [HttpPut(Name = "UpdateAllAddress")]
+        [HttpPut(Name = "UpdateAllClient")]
         public bool Update(Client client)
         {
 
             return _clientService.Update(client);
         }
+
+        [HttpDelete(Name = "DeleteAllClient")]
         public bool Delete(int id)
         {
             return _clientService.Delete(id);

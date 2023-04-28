@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AndreTurismoApp.AddressService.Data;
 using AndreTurismoApp.Models;
+using AndreTurismoApp.Services;
 
 namespace AndreTurismoApp.AddressService.Controllers
 {
@@ -83,13 +84,16 @@ namespace AndreTurismoApp.AddressService.Controllers
 
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost()]
         public async Task<ActionResult<Address>> PostAddress(Address address)
         {
           if (_context.Address == null)
           {
               return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
           }
+            var post = PostOfficesService.GetAddress(address.PostalCode).Result;
+
+
             _context.Address.Add(address);
             await _context.SaveChangesAsync();
 

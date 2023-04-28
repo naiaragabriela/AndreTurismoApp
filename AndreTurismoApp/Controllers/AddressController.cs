@@ -35,10 +35,10 @@ namespace AndreTurismoApp.Controllers
             return _addressService.Update(address);
         }
 
-        [HttpDelete(Name = "GetAllAddress")]
-        public bool Delete(Address address)
+        [HttpDelete(Name = "DeleteAddress")]
+        public bool Delete(int  id)
         {
-            return _addressService.Delete(address);
+            return _addressService.Delete(id);
         }
     }
 

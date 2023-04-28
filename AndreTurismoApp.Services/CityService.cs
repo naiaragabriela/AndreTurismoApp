@@ -5,31 +5,31 @@ namespace AndreTurismoApp.Services
 {
     public class CityService
     {
-        private readonly ICityRepository _repository;
+        private readonly ICityRepository _cityRepository;
         public CityService()
         {
-            _repository = new CityRepository();
+            _cityRepository = new CityRepository();
         }
         public int Add(City city)
         {
-            return _repository.Add(city);
+            return _cityRepository.Add(city);
 
         }
 
         public List<City> GetAll()
         {
-            return _repository.GetAll();
+            return _cityRepository.GetAll();
         }
 
         public bool Update(City city)
         {
-            return _repository.Update(city);
+            return _cityRepository.Update(city);
         }
 
 
         public bool Delete(int id)
         {
-            return _repository.Delete(id);
+            return _cityRepository.Delete(id);
         }
     }
 }

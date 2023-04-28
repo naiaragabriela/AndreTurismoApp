@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AndreTurismoApp.Models\AndreTurismoApp.Models.csproj" />
     <ProjectReference Include="..\AndreTurismoApp.Repositories\AndreTurismoApp.Repositories.csproj" />
   </ItemGroup>
