@@ -21,15 +21,15 @@ namespace AndreTurismoApp.Services
             return _repository.GetAll();
         }
 
-        public int Update(City city)
+        public bool Update(City city)
         {
             return _repository.Update(city);
         }
 
 
-        public int Delete(City city)
+        public bool Delete(int id)
         {
-            return _repository.Delete(city);
+            return _repository.Delete(id);
         }
     }
 }

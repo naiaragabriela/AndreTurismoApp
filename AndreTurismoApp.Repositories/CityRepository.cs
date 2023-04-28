@@ -31,27 +31,29 @@ namespace AndreTurismoApp.Repositories
             }
         }
 
-        public int Update(City city)
+        public bool Update(City city)
         {
-            int result = 0;
+            bool result = false;
 
             using (var db = new SqlConnection(strConn))
             {
                 db.Open();
-                result = (int)db.Execute(City.UPDATE, city);
+                db.Execute(City.UPDATE, city);
+                result = false;          
             }
             return result;
 
         }
 
-        public int Delete(City city)
+        public bool Delete(int id)
         {
-            int result = 0;
+            bool result = false;
 
             using (var db = new SqlConnection(strConn))
             {
                 db.Open();
-                result = (int)db.Execute(City.DELETE, city);
+                db.Execute(City.DELETE, id);
+                result = true;
             }
             return result;
 

@@ -7,14 +7,17 @@ using AndreTurismoApp.Models;
 
 namespace AndreTurismoApp.Repositories
 {
-    public interface ICityRepository
+    public interface IClientRepository
     {
-        int Add(City city);
+        
+    
+        int Add(Client client);
 
-        List<City> GetAll();
+        List<Client> GetAll();
 
-        bool Update(City city);
+        bool Update(Client client);
 
         bool Delete(int id);
+
     }
 }
