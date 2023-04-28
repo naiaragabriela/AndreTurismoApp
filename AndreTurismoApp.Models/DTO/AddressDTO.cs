@@ -17,13 +17,13 @@ namespace AndreTurismoApp.Models.DTO
         [JsonProperty("cep")]
         public string CEP { get; set; }
         [JsonProperty("bairro")]
-        public string Bairro { get; set; }
+        public string Neighborhood { get; set; }
         [JsonProperty("localidade")] 
         public string City { get; set;}
         [JsonProperty("uf")]
         public string State { get; set; }
         [JsonProperty("logradouro")]
-        public string Lograduro { get; set; }
+        public string Street { get; set; }
         [JsonProperty ("complemento")]
         public string Complement { get; set; }
 

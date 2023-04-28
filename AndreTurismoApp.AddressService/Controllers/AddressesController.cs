@@ -97,24 +97,23 @@ namespace AndreTurismoApp.AddressService.Controllers
 
             var post = PostOfficesService.GetAddress(cep).Result;
 
-            /*
-            Address newAddress = new Address()
+            
+            Address address = new Address()
             {
-                newAddress.Street = post.Lograduro,
-                newAddress.Number = number,
-                newAddress.PostalCode = cep,
-                newAddress.City = new City()
+                Street = post.Street,
+                Number = number,
+                PostalCode = cep,
+                City = new City()
                 {
-                    city.NameCity = post.City,
+                    
+                    NameCity = post.City,
                 }
-
-
             };
-            */
-          //  _context.Address.Add(address);
+            
+           _context.Address.Add(address);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAddress",// new { id = address.Id }, address);
+            return CreatedAtAction("GetAddress",new { id = address.Id }, address);
         }
 
         // DELETE: api/Addresses/5
