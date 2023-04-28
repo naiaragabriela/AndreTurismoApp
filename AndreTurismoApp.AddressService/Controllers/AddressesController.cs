@@ -32,7 +32,13 @@ namespace AndreTurismoApp.AddressService.Controllers
             {
                 return NotFound();
             }
-            return await _context.Address.ToListAsync();
+            return await _context.Address.Include(a=>a.City).ToListAsync();
+        }
+
+        [HttpGet("{cep:length(8)}")]
+        public ActionResult<AddressDTO>GetPostOffices(string cep)
+        {
+            return PostOfficesService.GetAddress(cep).Result;
         }
 
         // GET: api/Addresses/5
@@ -43,7 +49,7 @@ namespace AndreTurismoApp.AddressService.Controllers
             {
                 return NotFound();
             }
-            var address = await _context.Address.FindAsync(id);
+            var address = await _context.Address.Include(a=>a.City).Where(a=>a.Id==id).FirstOrDefaultAsync();
 
             if (address == null)
             {
@@ -86,14 +92,14 @@ namespace AndreTurismoApp.AddressService.Controllers
 
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost()]
+       
+        [HttpPost("{cep:length(8)}")]
         public async Task<ActionResult<Address>> PostAddress(string cep, int number)
         {
             if (_context.Address == null)
             {
                 return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
             }
-
 
             var post = PostOfficesService.GetAddress(cep).Result;
 
