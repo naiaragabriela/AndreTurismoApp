@@ -29,7 +29,8 @@ namespace AndreTurismoApp.TicketService.Controllers
           {
               return NotFound();
           }
-            return await _context.Ticket.ToListAsync();
+            return await _context.Ticket.Include(ticket=> ticket.Origin).ThenInclude(origin=> origin.City).ToListAsync();
+            return await _context.Ticket.Include(ticket => ticket.Destination).ThenInclude(destination => destination.City).ToListAsync();
         }
 
         // GET: api/Tickets/5

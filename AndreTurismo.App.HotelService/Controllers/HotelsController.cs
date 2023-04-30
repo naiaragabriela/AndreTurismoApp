@@ -29,7 +29,7 @@ namespace AndreTurismo.App.HotelService.Controllers
           {
               return NotFound();
           }
-            return await _context.Hotel.ToListAsync();
+            return await _context.Hotel.Include(hotel => hotel.Address).ThenInclude(address=> address.City).ToListAsync();
         }
 
         // GET: api/Hotels/5
@@ -40,7 +40,7 @@ namespace AndreTurismo.App.HotelService.Controllers
           {
               return NotFound();
           }
-            var hotel = await _context.Hotel.FindAsync(id);
+            var hotel = await _context.Hotel.Include(hotel => hotel.Address).ThenInclude(address => address.City).Where(hotel => hotel.Id == id).FirstOrDefaultAsync();
 
             if (hotel == null)
             {
