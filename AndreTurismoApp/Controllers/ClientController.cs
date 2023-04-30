@@ -11,7 +11,7 @@ namespace AndreTurismoApp.Controllers
     {
         private ClientService _clientService;
 
-        public ClientController(ClientService clientService)
+        public ClientController()
         {
             _clientService = new ClientService();
         }

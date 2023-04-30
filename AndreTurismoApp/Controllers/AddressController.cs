@@ -11,7 +11,7 @@ namespace AndreTurismoApp.Controllers
     {
         private AddressService _addressService;
 
-        public AddressController(AddressService addressService)
+        public AddressController()
         {
             _addressService = new AddressService();
         }

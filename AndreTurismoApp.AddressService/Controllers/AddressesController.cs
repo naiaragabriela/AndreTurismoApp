@@ -102,12 +102,15 @@ namespace AndreTurismoApp.AddressService.Controllers
             }
 
             var post = PostOfficesService.GetAddress(cep).Result;
-
+            
             Address address = new Address()
             {
+
                 Street = post.Street,
                 Number = number,
+                Neighborhood= post.Neighborhood,
                 PostalCode = cep,
+                Complement = " ",
                 City = new City()
                 {
                     NameCity = post.City,

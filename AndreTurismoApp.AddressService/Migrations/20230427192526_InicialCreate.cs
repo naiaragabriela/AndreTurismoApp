@@ -33,7 +33,7 @@ namespace AndreTurismoApp.AddressService.Migrations
                     Number = table.Column<int>(type: "int", nullable: false),
                     Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Complement = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Complement = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CityId = table.Column<int>(type: "int", nullable: false),
                     DtRegistration = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
