@@ -29,7 +29,7 @@ namespace AndreTurismoApp.ClientService.Controllers
           {
               return NotFound();
           }
-            return await _context.Client.ToListAsync();
+            return await _context.Client.Include(client=> client.Address).ThenInclude(address=>address.City).ToListAsync();
         }
 
         // GET: api/Clients/5
@@ -40,7 +40,7 @@ namespace AndreTurismoApp.ClientService.Controllers
           {
               return NotFound();
           }
-            var client = await _context.Client.FindAsync(id);
+            var client = await _context.Client.Include(client=>client.Address).ThenInclude(address=>address.City).Where(client => client.Id == id).FirstOrDefaultAsync();
 
             if (client == null)
             {
@@ -60,7 +60,8 @@ namespace AndreTurismoApp.ClientService.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(client).State = EntityState.Modified;
+            _context.Update(client.Address);
+            _context.Update(client);
 
             try
             {
