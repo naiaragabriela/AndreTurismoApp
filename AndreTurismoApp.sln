@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp", "AndreTurismoApp\AndreTurismoApp.csproj", "{E4A6ADEC-A2BA-4619-8063-75FFC68EA472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreTurismoApp", "AndreTurismoApp\AndreTurismoApp.csproj", "{E4A6ADEC-A2BA-4619-8063-75FFC68EA472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.Models", "AndreTurismoApp.Models\AndreTurismoApp.Models.csproj", "{B0B839FA-B3D6-44C9-8038-60D815663850}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreTurismoApp.Models", "AndreTurismoApp.Models\AndreTurismoApp.Models.csproj", "{B0B839FA-B3D6-44C9-8038-60D815663850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.Services", "AndreTurismoApp.Services\AndreTurismoApp.Services.csproj", "{92D83B7D-4BDA-465F-9CFB-F9A89034C4B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreTurismoApp.Services", "AndreTurismoApp.Services\AndreTurismoApp.Services.csproj", "{92D83B7D-4BDA-465F-9CFB-F9A89034C4B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.Repositories", "AndreTurismoApp.Repositories\AndreTurismoApp.Repositories.csproj", "{BE5D98D9-4C07-4EBA-A2A2-6B981A830EB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreTurismoApp.Repositories", "AndreTurismoApp.Repositories\AndreTurismoApp.Repositories.csproj", "{BE5D98D9-4C07-4EBA-A2A2-6B981A830EB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.AddressService", "AndreTurismoApp.AddressService\AndreTurismoApp.AddressService.csproj", "{F298E595-4B36-474A-9606-C2765480BE91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreTurismoApp.AddressService", "AndreTurismoApp.AddressService\AndreTurismoApp.AddressService.csproj", "{F298E595-4B36-474A-9606-C2765480BE91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.CityService", "AndreTurismoApp.CityService\AndreTurismoApp.CityService.csproj", "{C51B4611-9CFC-47FD-930D-DE75A2359025}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F298E595-4B36-474A-9606-C2765480BE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F298E595-4B36-474A-9606-C2765480BE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F298E595-4B36-474A-9606-C2765480BE91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C51B4611-9CFC-47FD-930D-DE75A2359025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C51B4611-9CFC-47FD-930D-DE75A2359025}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C51B4611-9CFC-47FD-930D-DE75A2359025}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C51B4611-9CFC-47FD-930D-DE75A2359025}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
