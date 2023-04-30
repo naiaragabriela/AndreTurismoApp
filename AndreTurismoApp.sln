@@ -15,6 +15,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndreTurismoApp.AddressServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.CityService", "AndreTurismoApp.CityService\AndreTurismoApp.CityService.csproj", "{C51B4611-9CFC-47FD-930D-DE75A2359025}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismo.App.HotelService", "AndreTurismo.App.HotelService\AndreTurismo.App.HotelService.csproj", "{E972E4D9-5964-4074-A370-E2F968BA8A3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.TicketService", "AndreTurismoApp.TicketService\AndreTurismoApp.TicketService.csproj", "{0B379F4B-E657-4583-8922-4A1796B770B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.ClientService", "AndreTurismoApp.ClientService\AndreTurismoApp.ClientService.csproj", "{68EE9F48-8B10-45E6-906C-3EE6CCEFBBA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreTurismoApp.PackageService", "AndreTurismoApp.PackageService\AndreTurismoApp.PackageService.csproj", "{F18BECB8-ADFC-4454-8F41-28FE14B1B9DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +53,22 @@ Global
 		{C51B4611-9CFC-47FD-930D-DE75A2359025}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C51B4611-9CFC-47FD-930D-DE75A2359025}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C51B4611-9CFC-47FD-930D-DE75A2359025}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E972E4D9-5964-4074-A370-E2F968BA8A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E972E4D9-5964-4074-A370-E2F968BA8A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E972E4D9-5964-4074-A370-E2F968BA8A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E972E4D9-5964-4074-A370-E2F968BA8A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B379F4B-E657-4583-8922-4A1796B770B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B379F4B-E657-4583-8922-4A1796B770B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B379F4B-E657-4583-8922-4A1796B770B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B379F4B-E657-4583-8922-4A1796B770B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68EE9F48-8B10-45E6-906C-3EE6CCEFBBA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68EE9F48-8B10-45E6-906C-3EE6CCEFBBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68EE9F48-8B10-45E6-906C-3EE6CCEFBBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68EE9F48-8B10-45E6-906C-3EE6CCEFBBA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F18BECB8-ADFC-4454-8F41-28FE14B1B9DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18BECB8-ADFC-4454-8F41-28FE14B1B9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F18BECB8-ADFC-4454-8F41-28FE14B1B9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F18BECB8-ADFC-4454-8F41-28FE14B1B9DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
