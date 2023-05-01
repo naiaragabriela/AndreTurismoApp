@@ -10,6 +10,10 @@ using AndreTurismoApp.Models;
 using AndreTurismoApp.ExternalService;
 using AndreTurismoApp.Services;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.ConstrainedExecution;
+using AndreTurismoApp.ClientService.Models;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Net;
 
 namespace AndreTurismoApp.ClientService.Controllers
 {
@@ -18,58 +22,78 @@ namespace AndreTurismoApp.ClientService.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly AndreTurismoAppClientServiceContext _context;
-        private readonly ExternalAddressService _externalAddressService;
-        private readonly ExternalCityService _externalCityService;
 
-        public ClientsController(AndreTurismoAppClientServiceContext context, ExternalAddressService externalAddressService, ExternalCityService externalCityService)
+        public ClientsController(AndreTurismoAppClientServiceContext context)
         {
             _context = context;
-            _externalCityService = externalCityService;
-            _externalAddressService = externalAddressService;
         }
 
         // GET: api/Clients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClient()
+        public async Task<ActionResult<IEnumerable<Client>>> GetClient(string? name, string? cep, string? city)
         {
-          if (_context.Client == null)
-          {
-              return NotFound();
-          }
-            return await _context.Client.Include(client=> client.Address).ThenInclude(address=>address.City).ToListAsync();
+            if (_context.Client == null)
+            {
+                return new List<Client>();
+            }
+
+            var context = _context.Client.Include(x => x.Address).AsQueryable();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                context = context.Where(x => x.Name.Equals(name));
+            }
+
+            if (!string.IsNullOrEmpty(cep))
+            {
+                context = context.Where(x => x.Address.PostalCode.Equals(cep));
+            }
+
+            if (!string.IsNullOrEmpty(city))
+            {
+                context = context.Where(x => x.Address.City.Name.Equals(city));
+            }
+
+            return await context.ToListAsync();
         }
 
         // GET: api/Clients/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClient(int id)
         {
-          if (_context.Client == null)
-          {
-              return NotFound();
-          }
-            var client = await _context.Client.Include(client=>client.Address).ThenInclude(address=>address.City).Where(client => client.Id == id).FirstOrDefaultAsync();
-
-            if (client == null)
+            if (_context.Client == null)
             {
                 return NotFound();
             }
+            var client = await _context.Client
+                .Include(client => client.Address)
+                .ThenInclude(address => address.City)
+                .Where(client => client.Id == id)
+                .FirstOrDefaultAsync();
 
-            return client;
+            return client == null ? (ActionResult<Client>)NotFound() : (ActionResult<Client>)client;
         }
 
         // PUT: api/Clients/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClient(int id, Client client)
+        public async Task<IActionResult> PutClient(int id, ClientPutRequestDTO request)
         {
-            if (id != client.Id)
+            if (request == null)
             {
                 return BadRequest();
             }
 
-            _context.Update(client.Address);
-            _context.Update(client);
+            var client = await _context.Client.FindAsync(id);
 
+            if (client == null)
+            {
+                return NotFound("ID invalido!!");
+            }
+
+            client.Name = request.Name;
+            client.Phone = request.Phone;
+
+            _context.Entry(client).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
@@ -85,43 +109,37 @@ namespace AndreTurismoApp.ClientService.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
+    
 
         // POST: api/Clients
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(string cep, int number,int idCity, string name, string phone)
+        public async Task<ActionResult<Client>> PostClient(ClientPostRequestDTO? request)
         {
-          if (_context.Client == null)
-          {
-              return Problem("Entity set 'AndreTurismoAppClientServiceContext.Client'  is null.");
-          }
-            var post = PostOfficesService.GetAddress(cep).Result;
-
-            var city = _externalCityService.GetCityById(idCity).Result;
-
+            if (_context.Client == null)
+            {
+                return Problem("Entity set 'AndreTurismoAppClientServiceContext.Client'  is null.");
+            }
 
             Client client = new Client()
             {
-                Name = name,
-                Phone = phone,
-                Address = new Address()
-                {
-                Street = post.Street,
-                Number = number,
-                Neighborhood = post.Neighborhood,
-                PostalCode = cep,
-                Complement = " ",
-                City = city,
-                }
+                Name = request.Name,
+                Phone = request.Phone,
+                AddressId = request.AddressId,
             };
 
             _context.Client.Add(client);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetClient", new { id = client.Id }, client);
+
+            ClientResponseDTO response = new()
+            {
+                Id = client.Id,
+                Name = client.Name
+            };
+
+            return CreatedAtAction("GetClient", new { id = client.Id }, response);
         }
 
         // DELETE: api/Clients/5
@@ -133,6 +151,7 @@ namespace AndreTurismoApp.ClientService.Controllers
                 return NotFound();
             }
             var client = await _context.Client.FindAsync(id);
+
             if (client == null)
             {
                 return NotFound();

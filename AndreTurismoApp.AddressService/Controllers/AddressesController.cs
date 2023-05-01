@@ -58,24 +58,25 @@ namespace AndreTurismoApp.AddressService.Controllers
             {
                 return NotFound();
             }
-            Address? address = await _context.Address.Include(a => a.City).Where(a => a.Id == id).SingleOrDefaultAsync();
+
+            var address = await _context.Address.Include(a => a.City).Where(a => a.Id == id).SingleOrDefaultAsync();
 
             return address == null ? (ActionResult<Address>)NotFound() : (ActionResult<Address>)address;
         }
 
         // PUT: api/Addresses/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(int id, AddressPutRequestDTO request)
+        public async Task<ActionResult> PutAddress(int id, AddressPutRequestDTO request)
         {
 
-            AndreTurismoApp.Models.DTO.AddressDTO postofficeResult = await PostOfficesService.GetAddress(request.PostalCode);
+            var postofficeResult = await PostOfficesService.GetAddress(request.PostalCode);
 
             if (postofficeResult == null)
             {
                 return BadRequest("CEP invalido!!");
             }
 
-            Address? address = await _context.Address.FindAsync(id);
+            var address = await _context.Address.FindAsync(id);
 
             if (address == null)
             {
@@ -124,7 +125,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
             }
 
-            AndreTurismoApp.Models.DTO.AddressDTO post = await PostOfficesService.GetAddress(request.PostalCode);
+           var post = await PostOfficesService.GetAddress(request.PostalCode);
 
             Address address = new()
             {
@@ -157,7 +158,7 @@ namespace AndreTurismoApp.AddressService.Controllers
             {
                 return NotFound();
             }
-            Address? address = await _context.Address.FindAsync(id);
+            var address = await _context.Address.FindAsync(id);
 
             if (address == null)
             {

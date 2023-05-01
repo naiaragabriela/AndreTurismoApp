@@ -1,4 +1,6 @@
-﻿using AndreTurismoApp.Models;
+﻿using System.Net;
+using AndreTurismoApp.ExternalService;
+using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,36 +11,42 @@ namespace AndreTurismoApp.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private ClientService _clientService;
+        private readonly ExternalClientService _clientService;
 
-        public ClientController()
+        public ClientController(ExternalClientService service)
         {
-            _clientService = new ClientService();
+            _clientService = service;
         }
 
         [HttpPost(Name = "InsertClient")]
-        public int Add(Client client)
+        public async Task<ActionResult> Add(Client client)
         {
-            return _clientService.Add(client);
+            var statusCode = (int)await _clientService.PostClient(client);
+
+            return StatusCode(statusCode);
         }
 
         [HttpGet(Name = "GetAllClient")]
-        public List<Client> GetAll()
+        public async Task<List<Client>> GetAll()
         {
-            return _clientService.GetAll();
+            var response = await _clientService.GetClient();
+            return response;
         }
 
         [HttpPut(Name = "UpdateAllClient")]
-        public bool Update(Client client)
+        public async Task<ActionResult> Update(Client client)
         {
+            var statusCode = (int)await _clientService.PutClient(client);
 
-            return _clientService.Update(client);
+            return StatusCode(statusCode);
         }
 
         [HttpDelete(Name = "DeleteAllClient")]
-        public bool Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return _clientService.Delete(id);
+            var statusCode = (int)await _clientService.DeleteClient(id);
+
+            return StatusCode(statusCode);
         }
 
     }

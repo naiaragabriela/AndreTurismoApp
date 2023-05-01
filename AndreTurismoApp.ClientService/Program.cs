@@ -16,8 +16,6 @@ builder.Services.AddSwaggerGen();
 
 
 
-builder.Services.AddSingleton<ExternalAddressService>();
-builder.Services.AddSingleton<ExternalCityService>();
 
 var app = builder.Build();
 
