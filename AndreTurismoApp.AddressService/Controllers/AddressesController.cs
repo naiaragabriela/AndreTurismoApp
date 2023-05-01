@@ -10,6 +10,7 @@ using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
 using Newtonsoft.Json;
 using AndreTurismoApp.Models.DTO;
+using AndreTurismoApp.ExternalService;
 
 namespace AndreTurismoApp.AddressService.Controllers
 {
@@ -18,10 +19,12 @@ namespace AndreTurismoApp.AddressService.Controllers
     public class AddressesController : ControllerBase
     {
         private readonly AndreTurismoAppAddressServiceContext _context;
+        private readonly ExternalCityService _externalCityService;
 
-        public AddressesController(AndreTurismoAppAddressServiceContext context)
+        public AddressesController(AndreTurismoAppAddressServiceContext context, ExternalCityService externalCityService)
         {
             _context = context;
+            _externalCityService = externalCityService;
         }
 
         // GET: api/Addresses
@@ -94,7 +97,7 @@ namespace AndreTurismoApp.AddressService.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
        
         [HttpPost("{cep:length(8)}")]
-        public async Task<ActionResult<Address>> PostAddress(string cep, int number)
+        public async Task<ActionResult<Address>> PostAddress(string cep, int number, int idCity)
         {
             if (_context.Address == null)
             {
@@ -102,19 +105,17 @@ namespace AndreTurismoApp.AddressService.Controllers
             }
 
             var post = PostOfficesService.GetAddress(cep).Result;
-            
+
+            var city = _externalCityService.GetCityById(idCity).Result;
+
             Address address = new Address()
             {
-
                 Street = post.Street,
                 Number = number,
-                Neighborhood= post.Neighborhood,
+                Neighborhood = post.Neighborhood,
                 PostalCode = cep,
                 Complement = " ",
-                City = new City()
-                {
-                    NameCity = post.City,
-                }
+                IdCity = city.Id
             };
             
            _context.Address.Add(address);

@@ -4,6 +4,7 @@ using AndreTurismoApp.AddressService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AndreTurismoApp.AddressService.Migrations
 {
     [DbContext(typeof(AndreTurismoAppAddressServiceContext))]
-    partial class AndreTurismoAppAddressServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20230430235118_UpdateIdCityAddress")]
+    partial class UpdateIdCityAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

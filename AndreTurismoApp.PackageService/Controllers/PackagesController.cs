@@ -29,7 +29,10 @@ namespace AndreTurismoApp.PackageService.Controllers
           {
               return NotFound();
           }
-            return await _context.Package.ToListAsync();
+            return await _context.Package.Include(package => package.Hotel).ThenInclude(hotel => hotel.Address.City).ToListAsync();
+            return await _context.Package.Include(package => package.Ticket).ThenInclude(ticket => ticket.Origin.City).ToListAsync();
+            return await _context.Package.Include(package => package.Ticket).ThenInclude(ticket => ticket.Destination.City).ToListAsync();
+            return await _context.Package.Include(package => package.Client).ThenInclude(client => client.Address.City).ToListAsync();
         }
 
         // GET: api/Packages/5

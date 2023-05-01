@@ -59,7 +59,7 @@ namespace AndreTurismoApp.ExternalService
         }
 
 
-        public async Task<HttpStatusCode> DeleteCity(int id)
+        public async Task<HttpStatusCode> DeleteAddress(int id)
         {
             HttpResponseMessage response = await addresses.DeleteAsync("https://localhost:8081/api/Addresses/" + id);
             return response.StatusCode;

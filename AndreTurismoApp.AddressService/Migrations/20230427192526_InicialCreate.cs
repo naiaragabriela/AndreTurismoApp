@@ -34,7 +34,7 @@ namespace AndreTurismoApp.AddressService.Migrations
                     Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Complement = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CityId = table.Column<int>(type: "int", nullable: false),
+                    IdCity = table.Column<int>(type: "int", nullable: false),
                     DtRegistration = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -42,7 +42,7 @@ namespace AndreTurismoApp.AddressService.Migrations
                     table.PrimaryKey("PK_Address", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Address_City_CityId",
-                        column: x => x.CityId,
+                        column: x => x.IdCity,
                         principalTable: "City",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);

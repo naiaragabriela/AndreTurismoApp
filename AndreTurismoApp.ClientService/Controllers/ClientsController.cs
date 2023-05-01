@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AndreTurismoApp.ClientService.Data;
 using AndreTurismoApp.Models;
+using AndreTurismoApp.ExternalService;
+using AndreTurismoApp.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace AndreTurismoApp.ClientService.Controllers
 {
@@ -15,10 +18,14 @@ namespace AndreTurismoApp.ClientService.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly AndreTurismoAppClientServiceContext _context;
+        private readonly ExternalAddressService _externalAddressService;
+        private readonly ExternalCityService _externalCityService;
 
-        public ClientsController(AndreTurismoAppClientServiceContext context)
+        public ClientsController(AndreTurismoAppClientServiceContext context, ExternalAddressService externalAddressService, ExternalCityService externalCityService)
         {
             _context = context;
+            _externalCityService = externalCityService;
+            _externalAddressService = externalAddressService;
         }
 
         // GET: api/Clients
@@ -85,12 +92,32 @@ namespace AndreTurismoApp.ClientService.Controllers
         // POST: api/Clients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(Client client)
+        public async Task<ActionResult<Client>> PostClient(string cep, int number, int idCity,string name, string phone)
         {
           if (_context.Client == null)
           {
               return Problem("Entity set 'AndreTurismoAppClientServiceContext.Client'  is null.");
           }
+            var post = PostOfficesService.GetAddress(cep).Result;
+
+            var city = _externalCityService.GetCityById(idCity).Result;
+
+
+            Client client = new Client()
+            {
+                Name = name,
+                Phone = phone,
+                Address =
+                {
+                Street = post.Street,
+                Number = number,
+                Neighborhood = post.Neighborhood,
+                PostalCode = cep,
+                Complement = " ",
+                IdCity = city.Id
+                }
+            };
+
             _context.Client.Add(client);
             await _context.SaveChangesAsync();
 
