@@ -14,7 +14,7 @@ namespace AndreTurismoApp.ExternalService
     {
 
         static readonly HttpClient clients = new HttpClient();
-        public async Task<List<Client>> GetAddress()
+        public async Task<List<Client>> GetClient()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace AndreTurismoApp.ExternalService
             }
         }
 
-        public async Task<Client> GetAddressById(int id)
+        public async Task<Client> GetClientById(int id)
         {
             try
             {

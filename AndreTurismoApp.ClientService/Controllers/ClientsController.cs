@@ -92,7 +92,7 @@ namespace AndreTurismoApp.ClientService.Controllers
         // POST: api/Clients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(string cep, int number, int idCity,string name, string phone)
+        public async Task<ActionResult<Client>> PostClient(string cep, int number,int idCity, string name, string phone)
         {
           if (_context.Client == null)
           {
@@ -107,14 +107,14 @@ namespace AndreTurismoApp.ClientService.Controllers
             {
                 Name = name,
                 Phone = phone,
-                Address =
+                Address = new Address()
                 {
                 Street = post.Street,
                 Number = number,
                 Neighborhood = post.Neighborhood,
                 PostalCode = cep,
                 Complement = " ",
-                IdCity = city.Id
+                City = city,
                 }
             };
 

@@ -40,8 +40,6 @@ namespace AndreTurismoApp.Models
         public string PostalCode { get; set; }
         public string? Complement { get; set; }
         public virtual City City { get; set; }
-        public int IdCity { get; set; }
-
         public DateTime DtRegistration { get; set; }
         #endregion
 

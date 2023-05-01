@@ -115,7 +115,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 Neighborhood = post.Neighborhood,
                 PostalCode = cep,
                 Complement = " ",
-                IdCity = city.Id
+                City = city,
             };
             
            _context.Address.Add(address);
