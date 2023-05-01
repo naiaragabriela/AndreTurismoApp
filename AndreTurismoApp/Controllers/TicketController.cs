@@ -1,4 +1,6 @@
-﻿using AndreTurismoApp.Models;
+﻿using System.Net.Sockets;
+using AndreTurismoApp.ExternalService;
+using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,25 +11,42 @@ namespace AndreTurismoApp.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-        public int Add(Ticket ticket)
-        {
+        private readonly ExternalTicketService _ticketService;
 
-            return new TicketService().Add(ticket);
+        public TicketController(ExternalTicketService service)
+        {
+            _ticketService = service;
         }
 
-        public List<Ticket> GetAll()
+        [HttpPost(Name = "InsertTicket")]
+        public async Task<ActionResult> Add(Ticket ticket)
         {
-            return new TicketService().GetAll();
+            var statusCode = (int)await _ticketService.PostTicket(ticket);
+
+            return StatusCode(statusCode);
         }
 
-        public int Update(Ticket ticket)
+        [HttpGet(Name = "GetAllTicket")]
+        public async Task<List<Ticket>> GetAll()
         {
-            return new TicketService().Update(ticket);
+            var response = await _ticketService.GetTicket();
+            return response;
         }
 
-        public int Delete(int id)
+        [HttpPut(Name = "UpdateTicket")]
+        public async Task<ActionResult> Update(Ticket ticket)
         {
-            return new TicketService().Delete(id);
+            var statusCode = (int)await _ticketService.PutTicket(ticket);
+
+            return StatusCode(statusCode);
+        }
+
+        [HttpDelete(Name = "DeleteTicket")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var statusCode = (int)await _ticketService.DeleteTicket(id);
+
+            return StatusCode(statusCode);
         }
     }
 }
