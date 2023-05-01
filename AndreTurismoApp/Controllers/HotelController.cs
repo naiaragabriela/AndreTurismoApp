@@ -1,4 +1,5 @@
-﻿using AndreTurismoApp.Models;
+﻿using AndreTurismoApp.ExternalService;
+using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,26 +10,43 @@ namespace AndreTurismoApp.Controllers
     [ApiController]
     public class HotelController : ControllerBase
     {
-        public int Add(Hotel hotel)
-        {
+        private readonly ExternalHotelService _hotelService;
 
-            return new HotelService().Add(hotel);
+        public HotelController(ExternalHotelService service)
+        {
+            _hotelService = service;
         }
 
-        public List<Hotel> GetAll()
+        [HttpPost(Name = "InsertHotel")]
+        public async Task<ActionResult> Add(Hotel hotel)
         {
-            return new HotelService().GetAll();
+            var statusCode = (int)await _hotelService.PostHotel(hotel);
+
+            return StatusCode(statusCode);
         }
 
-        public int Update(Hotel hotel)
-
+        [HttpGet(Name = "GetAllHotel")]
+        public async Task<List<Hotel>> GetAll()
         {
-            return new HotelService().Update(hotel);
+            var response = await _hotelService.GetHotel();
+            return response;
         }
 
-        public int Delete(int id)
+        [HttpPut(Name = "UpdateHotel")]
+        public async Task<ActionResult> Update(Hotel hotel)
+
         {
-            return new HotelService().Delete(id);
+            var statusCode = (int)await _hotelService.PutHotel(hotel);
+
+            return StatusCode(statusCode);
+        }
+
+        [HttpDelete(Name = "DeleteHotel")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var statusCode = (int)await _hotelService.DeleteHotel(id);
+
+            return StatusCode(statusCode);
         }
     }
 }

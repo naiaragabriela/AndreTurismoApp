@@ -69,7 +69,7 @@ namespace AndreTurismoApp.ClientService.Controllers
                 .Include(client => client.Address)
                 .ThenInclude(address => address.City)
                 .Where(client => client.Id == id)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
 
             return client == null ? (ActionResult<Client>)NotFound() : (ActionResult<Client>)client;
         }

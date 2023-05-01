@@ -32,7 +32,7 @@ namespace AndreTurismoApp.Controllers
             return response;
         }
 
-        [HttpPut(Name = "UpdateAllAddress")]
+        [HttpPut(Name = "UpdateAddress")]
         public async Task<ActionResult> Update(Address address)
         {
             var statusCode = (int)await _addressService.PutAddress(address);

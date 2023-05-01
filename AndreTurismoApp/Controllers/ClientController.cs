@@ -33,7 +33,7 @@ namespace AndreTurismoApp.Controllers
             return response;
         }
 
-        [HttpPut(Name = "UpdateAllClient")]
+        [HttpPut(Name = "UpdateClient")]
         public async Task<ActionResult> Update(Client client)
         {
             var statusCode = (int)await _clientService.PutClient(client);
@@ -41,7 +41,7 @@ namespace AndreTurismoApp.Controllers
             return StatusCode(statusCode);
         }
 
-        [HttpDelete(Name = "DeleteAllClient")]
+        [HttpDelete(Name = "DeleteClient")]
         public async Task<ActionResult> Delete(int id)
         {
             var statusCode = (int)await _clientService.DeleteClient(id);
