@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AndreTurismoApp.Models
+﻿namespace AndreTurismoApp.Models
 {
     public class Address
     {
 
         #region Constant
 
-        public readonly static string INSERT = "INSERT INTO ADDRESS(Street, Number, Neighborhood, PostalCode, Complement, DtRegistration, IdCity) " +
+        public static readonly string INSERT = "INSERT INTO ADDRESS(Street, Number, Neighborhood, PostalCode, Complement, DtRegistration, IdCity) " +
                     "VALUES (@Street, @Number, @Neighborhood, @PostalCode, @Complement, @DtRegistration, @IdCity); " +
                     "select cast(scope_identity() as int)";
 
 
 
-        public readonly static string SELECT = "SELECT[Address].[Id] AS Id, [Street],[Number],[Neighborhood],[PostalCode],[Complement],[Address].[DtRegistration]," +
-                                               "[addressCity].[Id] AS SplitIdCity,[addressCity].[Id], [addressCity].[NameCity], [addressCity].[DtRegistration]" +
+        public static readonly string SELECT = "SELECT[Address].[Id] AS Id, [Street],[Number],[Neighborhood],[PostalCode],[Complement],[Address].[DtRegistration]," +
+                                               "[addressCity].[Id] AS SplitIdCity,[addressCity].[Id], [addressCity].[Name], [addressCity].[DtRegistration]" +
                                                 "FROM[Address] JOIN[City] addressCity ON address.IdCity = addressCity.Id";
 
-        public readonly static string UPDATE = "UPDATE ADDRESS SET Street = @Street" +
+        public static readonly string UPDATE = "UPDATE ADDRESS SET Street = @Street" +
                                                "Number = @Number, " +
                                                "Neighborhood = @Neighborhood, " +
                                                "PostalCode = @PostalCode, " +
@@ -29,7 +23,7 @@ namespace AndreTurismoApp.Models
                                                "City = @IdCity " +
                                                "where id = @id";
 
-        public readonly static string DELETE = "DELETE FROM ADDRESS WHERE Id = @Id";
+        public static readonly string DELETE = "DELETE FROM ADDRESS WHERE Id = @Id";
         #endregion
 
         #region Properties 
@@ -39,8 +33,10 @@ namespace AndreTurismoApp.Models
         public string Neighborhood { get; set; }
         public string PostalCode { get; set; }
         public string? Complement { get; set; }
-        public virtual City City { get; set; }
+        public City City { get; set; }
+        public int CityId { get; set; } // shadow property
         public DateTime DtRegistration { get; set; }
+
         #endregion
 
         #region Methods

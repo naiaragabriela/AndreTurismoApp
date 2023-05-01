@@ -22,8 +22,8 @@ namespace AndreTurismoApp.Repositories
                 db.Open();
                 result = (int)db.ExecuteScalar(Hotel.INSERT, new
                 {
-                    NameHotel = hotel.NameHotel,
-                    CostHotel = hotel.CostHotel,
+                    Name = hotel.Name,
+                    Cost = hotel.Cost,
                     DtRegistration = hotel.DtRegistration,
                     IdAddress = hotel.Address.Id
                 });
@@ -61,8 +61,8 @@ namespace AndreTurismoApp.Repositories
                 db.Open();
                 result = (int)db.ExecuteScalar(Hotel.UPDATE, new
                 {
-                    NameHotel = hotel.NameHotel,
-                    CostHotel = hotel.CostHotel,
+                    Name = hotel.Name,
+                    Cost = hotel.Cost,
                     DtRegistration = hotel.DtRegistration,
                     IdAddress = hotel.Address.Id
                 });

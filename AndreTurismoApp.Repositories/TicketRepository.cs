@@ -26,7 +26,7 @@ namespace AndreTurismoApp.Repositories
                     IdOrigin = ticket.Origin.Id,
                     IdDestination = ticket.Destination.Id,
                     DtRegistration = ticket.DtRegistration,
-                    CostTicket = ticket.CostTicket
+                    Cost = ticket.Cost
 
                 });
             }
@@ -77,7 +77,7 @@ namespace AndreTurismoApp.Repositories
                     IdOrigin = ticket.Origin.Id,
                     IdDestination = ticket.Destination.Id,
                     DtRegistration = ticket.DtRegistration,
-                    CostTicket = ticket.CostTicket
+                    Cost = ticket.Cost
 
                 });
             }

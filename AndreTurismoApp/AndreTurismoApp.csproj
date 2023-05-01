@@ -7,10 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\HotelController.cs" />
+    <Compile Remove="Controllers\PackageController.cs" />
+    <Compile Remove="Controllers\TicketController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AndreTurismoApp.ExternalService\AndreTurismoApp.ExternalService.csproj" />
     <ProjectReference Include="..\AndreTurismoApp.Models\AndreTurismoApp.Models.csproj" />
     <ProjectReference Include="..\AndreTurismoApp.Services\AndreTurismoApp.Services.csproj" />
   </ItemGroup>

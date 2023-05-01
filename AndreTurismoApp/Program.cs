@@ -1,15 +1,22 @@
+using AndreTurismoApp.ExternalService;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<ExternalAddressService>();
+builder.Services.AddSingleton<ExternalCityService>();
+builder.Services.AddSingleton<ExternalClientService>();
+builder.Services.AddSingleton<ExternalHotelService>();
+builder.Services.AddSingleton<ExternalTicketService>();
+builder.Services.AddSingleton<ExternalPackageService>();
+builder.Services.AddSingleton<ExternalTicketService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

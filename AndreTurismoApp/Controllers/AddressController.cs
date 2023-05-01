@@ -1,6 +1,5 @@
-﻿using AndreTurismoApp.Models;
-using AndreTurismoApp.Services;
-using Microsoft.AspNetCore.Http;
+﻿using AndreTurismoApp.ExternalService;
+using AndreTurismoApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AndreTurismoApp.Controllers
@@ -9,36 +8,44 @@ namespace AndreTurismoApp.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-        private AddressService _addressService;
 
-        public AddressController()
+        private readonly ExternalAddressService _addressService;
+
+        public AddressController(ExternalAddressService services)
         {
-            _addressService = new AddressService();
+            _addressService = services;
         }
 
         [HttpPost(Name = "InsertAddress")]
-        public int Add(Address address)
+        public async Task<ActionResult> Add(Address address)
         {
-            return _addressService.Add(address);
+            var statusCode = (int)await _addressService.PostAddress(address);
+
+            return StatusCode(statusCode);
         }
 
         [HttpGet(Name = "GetAllAddress")]
-        public List<Address> GetAll()
+        public async Task<List<Address>> GetAll()
         {
-            return _addressService.GetAll();
+            var response = await _addressService.GetAddress();
+            
+            return response;
         }
 
         [HttpPut(Name = "UpdateAllAddress")]
-        public bool Update(Address address)
+        public async Task<ActionResult> Update(Address address)
         {
+            var statusCode = (int)await _addressService.PutAddress(address);
 
-            return _addressService.Update(address);
+            return StatusCode(statusCode);
         }
 
         [HttpDelete(Name = "DeleteAddress")]
-        public bool Delete(int  id)
+        public async Task<ActionResult> Delete(int  id)
         {
-            return _addressService.Delete(id);
+            var statusCode = (int)await _addressService.DeleteAddress(id);
+
+            return StatusCode(statusCode);
         }
     }
 

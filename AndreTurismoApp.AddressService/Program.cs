@@ -1,29 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using AndreTurismoApp.AddressService.Data;
-using AndreTurismoApp.ExternalService;
+﻿using AndreTurismoApp.AddressService.Data;
+using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AndreTurismoAppAddressServiceContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AndreTurismoAppAddressServiceContext") ?? throw new InvalidOperationException("Connection string 'AndreTurismoAppAddressServiceContext' not found.")));
-
-// Add services to the container.
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AndreTurismoAppAddressServiceContext") 
+    ?? throw new InvalidOperationException("Connection string 'AndreTurismoAppAddressServiceContext' not found.")));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<ExternalCityService>();
 
+WebApplication app = builder.Build();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

@@ -1,4 +1,5 @@
-﻿using AndreTurismoApp.Models;
+﻿using AndreTurismoApp.ExternalService;
+using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,34 +10,42 @@ namespace AndreTurismoApp.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        private CityService _cityService;
-        public CityController()
+        private readonly ExternalCityService _cityService;
+        public CityController(ExternalCityService service)
         {
-            _cityService = new CityService();
+            _cityService = service;
         }
 
         [HttpPost( Name = "InsertCity")]
-        public int Add(City city)
+        public async Task<ActionResult>Add(City city)
         {
-            return _cityService.Add(city);
+            var statusCode = (int)await _cityService.PostCity(city);
+
+            return StatusCode(statusCode);
         }
 
         [HttpGet(Name = "GetAllCity")]
-        public List<City> GetAll()
+        public async Task<List<City>> GetAll()
         {
-            return _cityService.GetAll();
+            var response = await _cityService.GetCity();
+
+            return response;
         }
 
         [HttpPut(Name = "UpdateCity")]
-        public bool Update(City city)
+        public async Task<ActionResult>Update(City city)
         {
-            return _cityService.Update(city);
+            var statusCode = (int)await _cityService.PutCity(city);
+
+            return StatusCode(statusCode);
         }
 
         [HttpDelete(Name = "DeleteCity")]
-        public bool Delete(int id)
+        public async Task<ActionResult>Delete(int id)
         {
-            return _cityService.Delete(id);
+            var statusCode = (int)await _cityService.DeleteCity(id);
+
+            return StatusCode(statusCode);
         }
     }
 }

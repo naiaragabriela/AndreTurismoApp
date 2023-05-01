@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using AndreTurismoApp.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace AndreTurismoApp.AddressService.Data
 {
     public class AndreTurismoAppAddressServiceContext : DbContext
     {
-        public AndreTurismoAppAddressServiceContext (DbContextOptions<AndreTurismoAppAddressServiceContext> options)
+        public AndreTurismoAppAddressServiceContext(DbContextOptions<AndreTurismoAppAddressServiceContext> options)
             : base(options)
         {
         }
