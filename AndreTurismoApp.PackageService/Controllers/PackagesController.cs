@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AndreTurismoApp.Models;
 using AndreTurismoApp.PackageService.Data;
+using System.Net.Sockets;
+using AndreTurismoApp.PackageService.Models;
 
 namespace AndreTurismoApp.PackageService.Controllers
 {
@@ -23,45 +25,82 @@ namespace AndreTurismoApp.PackageService.Controllers
 
         // GET: api/Packages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Package>>> GetPackage()
+        public async Task<ActionResult<IEnumerable<Package>>> GetPackage(string? nameHotel, int? ticketId, string? nameClient)
         {
-          if (_context.Package == null)
-          {
-              return NotFound();
-          }
-            return await _context.Package.Include(package => package.Hotel).ThenInclude(hotel => hotel.Address.City).ToListAsync();
-            return await _context.Package.Include(package => package.Ticket).ThenInclude(ticket => ticket.Origin.City).ToListAsync();
-            return await _context.Package.Include(package => package.Ticket).ThenInclude(ticket => ticket.Destination.City).ToListAsync();
-            return await _context.Package.Include(package => package.Client).ThenInclude(client => client.Address.City).ToListAsync();
+            if (_context.Package == null)
+            {
+                return new List<Package>();
+            }
+            var context = _context.Package
+                  .Include(package => package.Hotel)
+                  .ThenInclude(hotel => hotel.Address.City)
+                  .Include(package => package.Ticket)
+                  .ThenInclude(ticket => ticket.Origin.City)
+                  .Include(package => package.Ticket)
+                  .ThenInclude(ticket => ticket.Destination.City)
+                  .Include(package => package.Client)
+                  .ThenInclude(client => client.Address.City)
+                  .AsQueryable();
+
+            if (!string.IsNullOrEmpty(nameHotel))
+            {
+                context = context.Where(x => x.Hotel.Name.Equals(nameHotel));
+            }
+
+            if (ticketId != 0)
+            {
+                context = context.Where(x => x.Ticket.Id.Equals(ticketId));
+            }
+
+            if (!string.IsNullOrEmpty(nameClient))
+            {
+                context = context.Where(x => x.Client.Name.Equals(nameClient));
+            }
+
+            return await context.ToListAsync();
+
         }
 
         // GET: api/Packages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Package>> GetPackage(int id)
         {
-          if (_context.Package == null)
-          {
-              return NotFound();
-          }
-            var package = await _context.Package.FindAsync(id);
-
-            if (package == null)
+            if (_context.Package == null)
             {
                 return NotFound();
             }
+            var package = await _context.Package
+                .Include(package => package.Hotel)
+                .ThenInclude(hotel => hotel.Address.City)
+                .Include(package => package.Ticket)
+                .ThenInclude(ticket => ticket.Origin.City)
+                .Include(package => package.Ticket)
+                .ThenInclude(ticket => ticket.Destination.City)
+                .Include(package => package.Client)
+                .ThenInclude(client => client.Address.City)
+                .SingleOrDefaultAsync();
 
-            return package;
+            return package == null ? (ActionResult<Package>)NotFound() : (ActionResult<Package>)package;
         }
 
         // PUT: api/Packages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPackage(int id, Package package)
+        public async Task<IActionResult> PutPackage(int id, PackagePutRequestDTO request)
         {
-            if (id != package.Id)
+            if (request == null)
             {
                 return BadRequest();
             }
+
+            var package = await _context.Package.FindAsync(id);
+
+            if (package == null)
+            {
+                return NotFound("ID invalido!!");
+            }
+
+            package.Cost = request.Cost;
 
             _context.Entry(package).State = EntityState.Modified;
 
@@ -87,16 +126,31 @@ namespace AndreTurismoApp.PackageService.Controllers
         // POST: api/Packages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Package>> PostPackage(Package package)
+        public async Task<ActionResult<Package>> PostPackage(PackagePostRequestDTO request)
         {
-          if (_context.Package == null)
-          {
-              return Problem("Entity set 'AndreTurismoAppPackageServiceContext.Package'  is null.");
-          }
+            if (_context.Package == null)
+            {
+                return Problem("Entity set 'AndreTurismoAppPackageServiceContext.Package'  is null.");
+            }
+
+            Package package = new Package()
+            {
+                HotelId = request.HotelId,
+                ClientId = request.ClientId,
+                TicketId = request.TicketId,
+                Cost = request.Cost
+            };
+
             _context.Package.Add(package);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPackage", new { id = package.Id }, package);
+            Package response = new()
+            {
+                Id = package.Id,
+                ClientId = package.ClientId,
+            };
+
+            return CreatedAtAction("GetPackage", new { id = package.Id }, response);
         }
 
         // DELETE: api/Packages/5
