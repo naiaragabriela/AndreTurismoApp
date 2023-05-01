@@ -14,7 +14,6 @@ namespace AndreTurismoApp.ExternalService
     {
         static readonly HttpClient hotels = new HttpClient();
 
-
         public async Task<List<Hotel>> GetHotel()
         {
             try
@@ -30,7 +29,6 @@ namespace AndreTurismoApp.ExternalService
                 return new List<Hotel>();
             }
         }
-
         public async Task<Hotel> GetHotelById(int id)
         {
             try
@@ -46,20 +44,16 @@ namespace AndreTurismoApp.ExternalService
                 return null;
             }
         }
-
         public async Task<HttpStatusCode> PostHotel(Hotel hotel)
         {
             HttpResponseMessage response = await hotels.PostAsJsonAsync("https://localhost:8080/api/Hotels", hotel);
             return response.StatusCode;
         }
-
         public async Task<HttpStatusCode> PutHotel(Hotel hotel)
         {
             HttpResponseMessage response = await hotels.PutAsJsonAsync("https://localhost:8080/api/Hotels", hotel);
             return response.StatusCode;
         }
-
-
         public async Task<HttpStatusCode> DeleteHotel(int id)
         {
             HttpResponseMessage response = await hotels.DeleteAsync("https://localhost:8080/api/Hotels" + id);
