@@ -33,13 +33,17 @@ namespace AndreTurismoApp.PackageService.Controllers
             }
             var context = _context.Package
                   .Include(package => package.Hotel)
-                  .ThenInclude(hotel => hotel.Address.City)
+                  .ThenInclude(hotel => hotel.Address)
+                  .ThenInclude(address => address.City)
                   .Include(package => package.Ticket)
-                  .ThenInclude(ticket => ticket.Origin.City)
+                  .ThenInclude(ticket => ticket.Origin)
+                  .ThenInclude(origin => origin.City)
                   .Include(package => package.Ticket)
-                  .ThenInclude(ticket => ticket.Destination.City)
+                  .ThenInclude(ticket => ticket.Destination)
+                  .ThenInclude(destination => destination.City)
                   .Include(package => package.Client)
-                  .ThenInclude(client => client.Address.City)
+                  .ThenInclude(client => client.Address)
+                  .ThenInclude(address => address.City)
                   .AsQueryable();
 
             if (!string.IsNullOrEmpty(nameHotel))
@@ -47,7 +51,7 @@ namespace AndreTurismoApp.PackageService.Controllers
                 context = context.Where(x => x.Hotel.Name.Equals(nameHotel));
             }
 
-            if (ticketId != 0)
+            if (ticketId != 0 && ticketId != null)
             {
                 context = context.Where(x => x.Ticket.Id.Equals(ticketId));
             }
@@ -70,15 +74,20 @@ namespace AndreTurismoApp.PackageService.Controllers
                 return NotFound();
             }
             var package = await _context.Package
-                .Include(package => package.Hotel)
-                .ThenInclude(hotel => hotel.Address.City)
-                .Include(package => package.Ticket)
-                .ThenInclude(ticket => ticket.Origin.City)
-                .Include(package => package.Ticket)
-                .ThenInclude(ticket => ticket.Destination.City)
-                .Include(package => package.Client)
-                .ThenInclude(client => client.Address.City)
-                .SingleOrDefaultAsync();
+                  .Include(package => package.Hotel)
+                  .ThenInclude(hotel => hotel.Address)
+                  .ThenInclude(address => address.City)
+                  .Include(package => package.Ticket)
+                  .ThenInclude(ticket => ticket.Origin)
+                  .ThenInclude(origin => origin.City)
+                  .Include(package => package.Ticket)
+                  .ThenInclude(ticket => ticket.Destination)
+                  .ThenInclude(destination => destination.City)
+                  .Include(package => package.Client)
+                  .ThenInclude(client => client.Address)
+                  .ThenInclude(address => address.City)
+                  .Where(package=> package.Id == id)
+                  .SingleOrDefaultAsync();
 
             return package == null ? (ActionResult<Package>)NotFound() : (ActionResult<Package>)package;
         }

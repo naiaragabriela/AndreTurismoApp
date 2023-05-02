@@ -30,7 +30,7 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return new List<Hotel>();
             }
-            var context = _context.Hotel.Include(hotel => hotel.Address).AsQueryable();
+            var context = _context.Hotel.Include(hotel => hotel.Address).ThenInclude(address=>address.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {

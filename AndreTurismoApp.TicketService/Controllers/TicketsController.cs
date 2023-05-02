@@ -71,6 +71,7 @@ namespace AndreTurismoApp.TicketService.Controllers
                 .ThenInclude(origin => origin.City)
                 .Include(ticket => ticket.Destination)
                 .ThenInclude(destination => destination.City)
+                .Where(ticket => ticket.Id == id)
                 .SingleOrDefaultAsync();
 
             return ticket == null ? (ActionResult<Ticket>)NotFound() : (ActionResult<Ticket>)ticket;
