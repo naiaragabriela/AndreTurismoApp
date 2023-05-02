@@ -37,7 +37,7 @@ namespace AndreTurismoApp.ClientService.Controllers
                 return new List<Client>();
             }
 
-            var context = _context.Client.Include(x => x.Address).AsQueryable();
+            var context = _context.Client.Include(x => x.Address).ThenInclude(address=> address.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -111,7 +111,6 @@ namespace AndreTurismoApp.ClientService.Controllers
             }
             return NoContent();
         }
-    
 
         // POST: api/Clients
         [HttpPost]

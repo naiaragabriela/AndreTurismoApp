@@ -1,4 +1,6 @@
-﻿using AndreTurismoApp.Models;
+﻿using System.Net.Sockets;
+using AndreTurismoApp.ExternalService;
+using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,27 +11,43 @@ namespace AndreTurismoApp.Controllers
     [ApiController]
     public class PackageController : ControllerBase
     {
+        private readonly ExternalPackageService _packageService;
 
-        public int Add(Package package)
+        public PackageController(ExternalPackageService service)
         {
-
-
-            return new PackageService().Add(package);
+            _packageService = service;
         }
 
-        public List<Package> GetAll()
+
+        [HttpPost(Name = "InsertPackage")]
+        public async Task<ActionResult> Add(Package package)
         {
-            return new PackageService().GetAll();
+            var statusCode = (int)await _packageService.PostPackage(package);
+
+            return StatusCode(statusCode);
         }
 
-        public int Update(Package package)
+        [HttpGet(Name = "GetAllPackages")]
+        public async Task<List<Package>> GetAll()
         {
-            return new PackageService().Update(package);
+            var response = await _packageService.GetPackage();
+            return response;
         }
 
-        public int Delete(int id)
+        [HttpPut(Name = "UpdatePackage")]
+        public async Task<ActionResult> Update(Package package)
         {
-            return new PackageService().Delete(id);
+            var statusCode = (int)await _packageService.PutPackage(package);
+
+            return StatusCode(statusCode);
+        }
+
+        [HttpDelete(Name = "DeletePackage")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var statusCode = (int)await _packageService.DeletePackage(id);
+
+            return StatusCode(statusCode);
         }
 
     }
