@@ -54,7 +54,7 @@ namespace AndreTurismoApp.Teste
                     Neighborhood = "Jardim Morumbi",
                     Complement = " ",
                     CityId = 3,
-                    City = new City() { Id = 3, Name = "Jabotical" }
+                    City = new City() { Id = 3, Name = "Jaboticabal" }
                 });
                 context.SaveChanges();
             }
@@ -129,7 +129,6 @@ namespace AndreTurismoApp.Teste
             AddressPutRequestDTO address = new ()
             {
                 Number = 10,
-                PostalCode = "14804300",
                 Complement =  " ",
             };
 

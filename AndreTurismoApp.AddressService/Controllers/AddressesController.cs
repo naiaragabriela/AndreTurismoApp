@@ -68,13 +68,6 @@ namespace AndreTurismoApp.AddressService.Controllers
         public async Task<ActionResult> PutAddress(int id, AddressPutRequestDTO request)
         {
 
-            var postofficeResult = await PostOfficesService.GetAddress(request.PostalCode);
-
-            if (postofficeResult == null)
-            {
-                return BadRequest("CEP invalido!!");
-            }
-
             var address = await _context.Address.FindAsync(id);
 
             if (address == null)
@@ -84,7 +77,6 @@ namespace AndreTurismoApp.AddressService.Controllers
 
             address.Number = request.Number;
             address.Complement = request.Complement;
-            address.PostalCode = request.PostalCode;
 
             _context.Entry(address).State = EntityState.Modified;
 
