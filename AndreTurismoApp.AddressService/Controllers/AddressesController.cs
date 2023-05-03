@@ -1,6 +1,5 @@
 ﻿using AndreTurismoApp.AddressService.Data;
 using AndreTurismoApp.AddressService.Models;
-using AndreTurismoApp.ExternalService;
 using AndreTurismoApp.Models;
 using AndreTurismoApp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +18,7 @@ namespace AndreTurismoApp.AddressService.Controllers
             _context = context;
         }
 
+        // TDD
         // GET: api/Addresses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Address>>> GetAddress(string? cep, string? city, string? neighborhood)
@@ -35,7 +35,6 @@ namespace AndreTurismoApp.AddressService.Controllers
                 context = context.Where(x => x.PostalCode.Equals(cep));
             }
 
-
             if (!string.IsNullOrEmpty(city))
             {
                 context = context.Where(x => x.City.Name.Equals(city));
@@ -46,7 +45,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 context = context.Where(x => x.Neighborhood.Equals(neighborhood));
             }
 
-            return await context.ToListAsync();
+            return await  context.ToListAsync();
         }
 
 
@@ -83,10 +82,8 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return NotFound("ID invalido!!");
             }
 
-            address.Neighborhood = postofficeResult.Neighborhood;
             address.Number = request.Number;
             address.Complement = request.Complement;
-            address.Street = postofficeResult.Street;
             address.PostalCode = request.PostalCode;
 
             _context.Entry(address).State = EntityState.Modified;
@@ -133,7 +130,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 Number = request.Number,
                 Neighborhood = post.Neighborhood,
                 PostalCode = request.PostalCode,
-                Complement = string.Empty,
+                Complement = request.Complement,
                 CityId = request.CityId,
             };
 
@@ -152,7 +149,7 @@ namespace AndreTurismoApp.AddressService.Controllers
 
         // DELETE: api/Addresses/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAddress(int id)
+        public async Task<ActionResult> DeleteAddress(int id)
         {
             if (_context.Address == null)
             {
