@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AndreTurismo.App.HotelService.Controllers;
 using AndreTurismo.App.HotelService.Data;
+using AndreTurismo.App.HotelService.Models;
 using AndreTurismoApp.ClientService.Controllers;
 using AndreTurismoApp.ClientService.Data;
 using AndreTurismoApp.ClientService.Models;
@@ -91,7 +92,7 @@ namespace AndreTurismoApp.Teste
                 Assert.Equal(2, hotel.Value?.Id);
             }
         }
-        /*
+       
         [Fact]
         public async void ShouldBe_ReturnSucess_WhenCall_PostHotel()
         {
@@ -99,58 +100,57 @@ namespace AndreTurismoApp.Teste
 
             HotelPostRequestDTO hotel = new()
             {
-                Name = "Ana",
-                Phone = "33845678",
-                AddressId = 2,
+                Id = 3,
+                Name = "Hotel Florença",
+                Cost = 200,
+                AddressId = 1,
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppClientServiceContext(options))
+            using (var context = new AndreTurismoAppHotelServiceContext(options))
             {
-                var clientController = new ClientsController(context);
-                var response = await clientController.PostClient(client);
+                var hotelController = new HotelsController(context);
+                var response = await hotelController.PostHotel(hotel);
                 var result = response.Result as CreatedAtActionResult;
                 Assert.NotNull(result?.Value);
             }
         }
 
         [Fact]
-        public async void ShouldBe_ReturnSucess_WhenCall_PutClient()
+        public async void ShouldBe_ReturnSucess_WhenCall_PutHotel()
         {
             InitializeDataBase();
 
-            ClientPutRequestDTO client = new()
+            HotelPutRequestDTO hotel = new()
             {
-                Name = "Gustavo",
-                Phone = "12345678",
+                Id = 1,
+                Name = "Hotel Ibis",
+                Cost = 150,
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppClientServiceContext(options))
+            using (var context = new AndreTurismoAppHotelServiceContext(options))
             {
-                var clientController = new ClientsController(context);
-                var response = await clientController.PutClient(3, client);
+                var hotelController = new HotelsController(context);
+                var response = await hotelController.PutHotel(1, hotel);
                 var result = response as NoContentResult;
                 Assert.NotNull(result);
             }
         }
 
         [Fact]
-
-        public async void ShouldBe_ReturnSucess_WhenCall_DeleteClient()
+        public async void ShouldBe_ReturnSucess_WhenCall_DeleteHotel()
         {
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppClientServiceContext(options))
+            using (var context = new AndreTurismoAppHotelServiceContext(options))
             {
-                var clientController = new ClientsController(context);
-                var response = await clientController.DeleteClient(2);
+                var hotelController = new HotelsController(context);
+                var response = await hotelController.DeleteHotel(2);
                 var result = response as NoContentResult;
                 Assert.NotNull(result);
             }
-        }
-        */
-        
+        } 
     }
 }
