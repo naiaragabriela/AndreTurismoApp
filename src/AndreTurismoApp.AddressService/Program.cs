@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AndreTurismoAppAddressServiceContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AndreTurismoAppAddressServiceContext") 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AndreTurismoAppAddressServiceContext")
     ?? throw new InvalidOperationException("Connection string 'AndreTurismoAppAddressServiceContext' not found.")));
 
 builder.Services.AddControllers();

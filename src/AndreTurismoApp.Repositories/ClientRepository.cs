@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using AndreTurismoApp.Models;
 using Dapper;
 
 namespace AndreTurismoApp.Repositories
 {
-    public class ClientRepository: IClientRepository
+    public class ClientRepository : IClientRepository
     {
-        readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
+        private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
 
-        public int Add(Client client)
+        public int Add(Customer client)
         {
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                result = (int)db.ExecuteScalar(Client.INSERT, new
+                result = (int)db.ExecuteScalar(Customer.INSERT, new
                 {
-                    Name = client.Name,
-                    Phone = client.Phone,
-                    DtRegistration = client.DtRegistration,
+                    client.Name,
+                    client.Phone,
+                    client.DtRegistration,
                     IdAddress = client.Address.Id,
                 });
             }
@@ -36,39 +31,39 @@ namespace AndreTurismoApp.Repositories
         {
             bool result = false;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                db.Execute(Client.DELETE, id);
+                _ = db.Execute(Customer.DELETE, id);
                 result = true;
             }
             return result;
         }
 
-        public List<Client> GetAll()
+        public List<Customer> GetAll()
         {
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                var client = db.Query<Client, Address, City, Client>(Client.SELECT, (client, address, city) =>
+                IEnumerable<Customer> client = db.Query<Customer, Address, City, Customer>(Customer.SELECT, (client, address, city) =>
                 {
                     address.City = city;
                     client.Address = address;
                     return client;
                 }, splitOn: "SplitAddress,SplitCity");
 
-                return (List<Client>)client;
+                return (List<Customer>)client;
             };
         }
 
-        public bool Update(Client client)
+        public bool Update(Customer client)
         {
             bool result = false;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                db.Execute(Client.UPDATE, client);
+                _ = db.Execute(Customer.UPDATE, client);
                 result = true;
             }
             return result;

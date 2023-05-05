@@ -28,12 +28,12 @@
 
         #region Properties 
         public int Id { get; set; }
-        public string Street { get; set; }
+        public string? Street { get; set; }
         public int Number { get; set; }
-        public string Neighborhood { get; set; }
-        public string PostalCode { get; set; }
+        public string? Neighborhood { get; set; }
+        public string? PostalCode { get; set; }
         public string? Complement { get; set; }
-        public City City { get; set; }
+        public City? City { get; set; }
         public int CityId { get; set; } // shadow property
         public DateTime DtRegistration { get; set; }
 

@@ -7,6 +7,6 @@ namespace AndreTurismoApp.Models.DTO
         public int IdCity { get; set; }
 
         [JsonProperty("localidade")]
-        public string City { get; set; }
+        public string? City { get; set; }
     }
 }

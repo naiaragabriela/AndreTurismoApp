@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using AndreTurismoApp.Models;
 using Dapper;
 
@@ -11,24 +6,24 @@ namespace AndreTurismoApp.Repositories
 {
     public class AddressRepository : IAddressRepository
     {
-        readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
+        private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
 
         public int Add(Address address)
         {
 
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
                 result = (int)db.ExecuteScalar(Address.INSERT, new
                 {
-                    Street = address.Street,
-                    Number = address.Number,
-                    Neighborhood = address.Neighborhood,
-                    PostalCode = address.PostalCode,
-                    Complement = address.Complement,
-                    DtRegistration = address.DtRegistration,
+                    address.Street,
+                    address.Number,
+                    address.Neighborhood,
+                    address.PostalCode,
+                    address.Complement,
+                    address.DtRegistration,
                     IdCity = address.City.Id
                 });
             }
@@ -37,11 +32,11 @@ namespace AndreTurismoApp.Repositories
 
         public List<Address> GetAll()
         {
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
 
-                var address = db.Query<Address, City, Address>(Address.SELECT, (address, city) =>
+                IEnumerable<Address> address = db.Query<Address, City, Address>(Address.SELECT, (address, city) =>
                 {
                     address.City = city;
                     return address;
@@ -57,10 +52,10 @@ namespace AndreTurismoApp.Repositories
         {
             bool result = false;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                db.Execute(Address.DELETE, id);
+                _ = db.Execute(Address.DELETE, id);
                 result = true;
             }
             return result;
@@ -72,17 +67,17 @@ namespace AndreTurismoApp.Repositories
 
             bool result = false;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                db.Execute(Address.UPDATE, new
+                _ = db.Execute(Address.UPDATE, new
                 {
-                    Street = address.Street,
-                    Number = address.Number,
-                    Neighborhood = address.Neighborhood,
-                    PostalCode = address.PostalCode,
-                    Complement = address.Complement,
-                    DtRegistration = address.DtRegistration,
+                    address.Street,
+                    address.Number,
+                    address.Neighborhood,
+                    address.PostalCode,
+                    address.Complement,
+                    address.DtRegistration,
                     IdCity = address.City.Id
                 });
                 result = true;

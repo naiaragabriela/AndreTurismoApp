@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using AndreTurismoApp.AddressService.Controllers;
-using AndreTurismoApp.AddressService.Data;
-using AndreTurismoApp.AddressService.Models;
-using AndreTurismoApp.ClientService.Controllers;
+﻿using AndreTurismoApp.ClientService.Controllers;
 using AndreTurismoApp.ClientService.Data;
 using AndreTurismoApp.ClientService.Models;
-using AndreTurismoApp.Controllers;
 using AndreTurismoApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace AndreTurismoApp.Teste
@@ -31,55 +20,53 @@ namespace AndreTurismoApp.Teste
             .Options;
 
 
-            using (var context = new AndreTurismoAppClientServiceContext(options))
+            using AndreTurismoAppClientServiceContext context = new(options);
+            _ = context.Client.Add(new Customer
             {
-                context.Client.Add(new Client
+                Id = 1,
+                Name = "Simone",
+                Phone = "992228974",
+                Address = new()
                 {
                     Id = 1,
-                    Name = "Simone",
-                    Phone = "992228974",
-                    Address = new()
+                    Street = "Rua Paulo Chioda",
+                    PostalCode = "14890238",
+                    Number = 235,
+                    Neighborhood = "Jardim Morumbi",
+                    Complement = " ",
+                    CityId = 3,
+                    City = new City()
                     {
-                        Id = 1,
-                        Street = "Rua Paulo Chioda",
-                        PostalCode = "14890238",
-                        Number = 235,
-                        Neighborhood = "Jardim Morumbi",
-                        Complement = " ",
-                        CityId = 3,
-                        City = new City()
-                        {
-                            Id = 3,
-                            Name = "Jaboticabal"
-                        }
-
+                        Id = 3,
+                        Name = "Jaboticabal"
                     }
-                });
 
-                context.Client.Add(new Client
+                }
+            });
+
+            _ = context.Client.Add(new Customer
+            {
+                Id = 2,
+                Name = "Naiara",
+                Phone = "992226574",
+                Address = new()
                 {
                     Id = 2,
-                    Name = "Naiara",
-                    Phone = "992226574",
-                    Address = new()
+                    Street = "Rua Alessio Santini",
+                    PostalCode = "14804021",
+                    Number = 260,
+                    Neighborhood = "Jardim Paraíso",
+                    Complement = " ",
+                    CityId = 2,
+                    City = new City()
                     {
                         Id = 2,
-                        Street = "Rua Alessio Santini",
-                        PostalCode = "14804021",
-                        Number = 260,
-                        Neighborhood = "Jardim Paraíso",
-                        Complement = " ",
-                        CityId = 2,
-                        City = new City()
-                        {
-                            Id = 2,
-                            Name = "Araraquara"
-                        }
+                        Name = "Araraquara"
                     }
-                });
+                }
+            });
 
-                context.SaveChanges();
-            }
+            _ = context.SaveChanges();
         }
 
         [Fact]
@@ -88,13 +75,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppClientServiceContext(options))
-            {
-                var clientId = 2;
-                var clientController = new ClientsController(context);
-                var client = await clientController.GetClient(clientId);
-                Assert.Equal(2, client.Value?.Id);
-            }
+            using AndreTurismoAppClientServiceContext context = new(options);
+            int CustomerId = 2;
+            CustomersController clientController = new(context);
+            ActionResult<Customer> client = await clientController.GetCustomerById(CustomerId);
+            Assert.Equal(2, client.Value?.Id);
         }
 
         [Fact]
@@ -110,13 +95,11 @@ namespace AndreTurismoApp.Teste
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppClientServiceContext(options))
-            {
-                var clientController = new ClientsController(context);
-                var response = await clientController.PostClient(client);
-                var result = response.Result as CreatedAtActionResult;
-                Assert.NotNull(result?.Value);
-            }
+            using AndreTurismoAppClientServiceContext context = new(options);
+            CustomersController clientController = new(context);
+            ActionResult<Customer> response = await clientController.PostCustomer(client);
+            CreatedAtActionResult? result = response.Result as CreatedAtActionResult;
+            Assert.NotNull(result?.Value);
         }
 
         [Fact]
@@ -131,13 +114,11 @@ namespace AndreTurismoApp.Teste
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppClientServiceContext(options))
-            {
-                var clientController = new ClientsController(context);
-                var response = await clientController.PutClient(3, client);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
+            using AndreTurismoAppClientServiceContext context = new(options);
+            CustomersController clientController = new(context);
+            IActionResult response = await clientController.PutCustomer(3, client);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
         }
 
         [Fact]
@@ -147,13 +128,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppClientServiceContext(options))
-            {
-                var clientController = new ClientsController(context);
-                var response = await clientController.DeleteClient(2);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
+            using AndreTurismoAppClientServiceContext context = new(options);
+            CustomersController clientController = new(context);
+            IActionResult response = await clientController.DeleteCustomer(2);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
         }
     }
 

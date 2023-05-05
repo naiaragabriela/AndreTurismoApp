@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using AndreTurismoApp.Models;
 using Dapper;
 
 namespace AndreTurismoApp.Repositories
 {
-    public class TicketRepository: ITicketRepository
+    public class TicketRepository : ITicketRepository
     {
-        readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
+        private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
 
         public int Add(Ticket ticket)
         {
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
                 result = (int)db.ExecuteScalar(Ticket.INSERT, new
                 {
                     IdOrigin = ticket.Origin.Id,
                     IdDestination = ticket.Destination.Id,
-                    DtRegistration = ticket.DtRegistration,
-                    Cost = ticket.Cost
+                    ticket.DtRegistration,
+                    ticket.Cost
 
                 });
             }
@@ -37,20 +31,20 @@ namespace AndreTurismoApp.Repositories
         {
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                result = (int)db.Execute(Ticket.DELETE, id);
+                result = db.Execute(Ticket.DELETE, id);
             }
             return result;
         }
 
         public List<Ticket> GetAll()
         {
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                var ticket = db.Query<Ticket, Address, City, Address, City, Ticket>(Ticket.SELECT, (ticket, addressOrigin, cityOrigin,
+                IEnumerable<Ticket> ticket = db.Query<Ticket, Address, City, Address, City, Ticket>(Ticket.SELECT, (ticket, addressOrigin, cityOrigin,
                     addressDestination, cityDestination) =>
                 {
                     addressOrigin.City = cityOrigin;
@@ -69,15 +63,15 @@ namespace AndreTurismoApp.Repositories
 
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
                 result = (int)db.ExecuteScalar(Ticket.UPDATE, new
                 {
                     IdOrigin = ticket.Origin.Id,
                     IdDestination = ticket.Destination.Id,
-                    DtRegistration = ticket.DtRegistration,
-                    Cost = ticket.Cost
+                    ticket.DtRegistration,
+                    ticket.Cost
 
                 });
             }

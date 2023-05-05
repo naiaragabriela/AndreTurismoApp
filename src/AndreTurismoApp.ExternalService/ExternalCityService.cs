@@ -1,31 +1,26 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using System.Net.Sockets;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using AndreTurismoApp.Models;
-using AndreTurismoApp.Models.DTO;
 using Newtonsoft.Json;
 
 namespace AndreTurismoApp.ExternalService
 {
     public class ExternalCityService
     {
-        static readonly HttpClient cities = new HttpClient();
-  
+        private static readonly HttpClient cities = new();
+
 
         public async Task<List<City>> GetCity()
         {
             try
             {
                 HttpResponseMessage response = await cities.GetAsync("https://localhost:8082/api/Cities");
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<List<City>>(ender);
+                List<City>? end = JsonConvert.DeserializeObject<List<City>>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return new List<City>();
             }
@@ -35,13 +30,13 @@ namespace AndreTurismoApp.ExternalService
         {
             try
             {
-                HttpResponseMessage response = await cities.GetAsync("https://localhost:8082/api/Cities/"+ id);
-                response.EnsureSuccessStatusCode();
+                HttpResponseMessage response = await cities.GetAsync("https://localhost:8082/api/Cities/" + id);
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<City>(ender);
+                City? end = JsonConvert.DeserializeObject<City>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return null;
             }
@@ -62,7 +57,7 @@ namespace AndreTurismoApp.ExternalService
 
         public async Task<HttpStatusCode> DeleteCity(int id)
         {
-            HttpResponseMessage response = await cities.DeleteAsync("https://localhost:8082/api/Cities/"+ id);
+            HttpResponseMessage response = await cities.DeleteAsync("https://localhost:8082/api/Cities/" + id);
             return response.StatusCode;
         }
 

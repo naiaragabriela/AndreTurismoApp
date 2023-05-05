@@ -1,7 +1,5 @@
 ﻿using AndreTurismoApp.ExternalService;
 using AndreTurismoApp.Models;
-using AndreTurismoApp.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AndreTurismoApp.Controllers
@@ -20,7 +18,7 @@ namespace AndreTurismoApp.Controllers
         [HttpPost(Name = "InsertHotel")]
         public async Task<ActionResult> Add(Hotel hotel)
         {
-            var statusCode = (int)await _hotelService.PostHotel(hotel);
+            int statusCode = (int)await _hotelService.PostHotel(hotel);
 
             return StatusCode(statusCode);
         }
@@ -28,7 +26,7 @@ namespace AndreTurismoApp.Controllers
         [HttpGet(Name = "GetAllHotel")]
         public async Task<List<Hotel>> GetAll()
         {
-            var response = await _hotelService.GetHotel();
+            List<Hotel> response = await _hotelService.GetHotel();
             return response;
         }
 
@@ -36,7 +34,7 @@ namespace AndreTurismoApp.Controllers
         public async Task<ActionResult> Update(Hotel hotel)
 
         {
-            var statusCode = (int)await _hotelService.PutHotel(hotel);
+            int statusCode = (int)await _hotelService.PutHotel(hotel);
 
             return StatusCode(statusCode);
         }
@@ -44,7 +42,7 @@ namespace AndreTurismoApp.Controllers
         [HttpDelete(Name = "DeleteHotel")]
         public async Task<ActionResult> Delete(int id)
         {
-            var statusCode = (int)await _hotelService.DeleteHotel(id);
+            int statusCode = (int)await _hotelService.DeleteHotel(id);
 
             return StatusCode(statusCode);
         }

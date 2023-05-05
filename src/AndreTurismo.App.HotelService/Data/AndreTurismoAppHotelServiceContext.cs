@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using AndreTurismoApp.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace AndreTurismo.App.HotelService.Data
 {
     public class AndreTurismoAppHotelServiceContext : DbContext
     {
-        public AndreTurismoAppHotelServiceContext (DbContextOptions<AndreTurismoAppHotelServiceContext> options)
+        public AndreTurismoAppHotelServiceContext(DbContextOptions<AndreTurismoAppHotelServiceContext> options)
             : base(options)
         {
         }

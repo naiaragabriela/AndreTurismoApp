@@ -7,19 +7,18 @@ namespace AndreTurismoApp.ExternalService
 {
     public class ExternalAddressService
     {
-
-        static readonly HttpClient addresses = new HttpClient();
+        private static readonly HttpClient addresses = new();
         public async Task<List<Address>> GetAddress()
         {
             try
             {
                 HttpResponseMessage response = await addresses.GetAsync("https://localhost:8081/api/Addresses");
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<List<Address>>(ender);
+                List<Address>? end = JsonConvert.DeserializeObject<List<Address>>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return new List<Address>();
             }
@@ -30,12 +29,12 @@ namespace AndreTurismoApp.ExternalService
             try
             {
                 HttpResponseMessage response = await addresses.GetAsync("https://localhost:8081/api/Addresses/" + id);
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<Address>(ender);
+                Address? end = JsonConvert.DeserializeObject<Address>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return null;
             }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using AndreTurismoApp.Models;
 using Newtonsoft.Json;
 
@@ -12,18 +7,18 @@ namespace AndreTurismoApp.ExternalService
 {
     public class ExternalTicketService
     {
-        static readonly HttpClient tickets = new HttpClient();
+        private static readonly HttpClient tickets = new();
         public async Task<List<Ticket>> GetTicket()
         {
             try
             {
                 HttpResponseMessage response = await tickets.GetAsync("https://localhost:8085/api/Tickets");
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<List<Ticket>>(ender);
+                List<Ticket>? end = JsonConvert.DeserializeObject<List<Ticket>>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return new List<Ticket>();
             }
@@ -33,12 +28,12 @@ namespace AndreTurismoApp.ExternalService
             try
             {
                 HttpResponseMessage response = await tickets.GetAsync("https://localhost:8085/api/Tickets/" + id);
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<Ticket>(ender);
+                Ticket? end = JsonConvert.DeserializeObject<Ticket>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return null;
             }

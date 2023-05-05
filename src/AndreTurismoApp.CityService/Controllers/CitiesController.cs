@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AndreTurismoApp.CityService.Data;
+﻿using AndreTurismoApp.CityService.Data;
 using AndreTurismoApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AndreTurismoApp.CityService.Controllers
 {
@@ -20,11 +20,11 @@ namespace AndreTurismoApp.CityService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<City>>> GetCity(string? city)
         {
-          if (_context.City == null)
-          {
-              return NotFound();
-          }
-            var context = _context.City.AsQueryable();
+            if (_context.City == null)
+            {
+                return NotFound();
+            }
+            IQueryable<City> context = _context.City.AsQueryable();
 
             if (!string.IsNullOrEmpty(city))
             {
@@ -37,18 +37,13 @@ namespace AndreTurismoApp.CityService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<City>> GetCity(int id)
         {
-          if (_context.City == null)
-          {
-              return NotFound();
-          }
-            var city = await _context.City.FindAsync(id);
-
-            if (city == null)
+            if (_context.City == null)
             {
                 return NotFound();
             }
+            City? city = await _context.City.FindAsync(id);
 
-            return city;
+            return city == null ? (ActionResult<City>)NotFound() : (ActionResult<City>)city;
         }
 
         // PUT: api/Cities/5
@@ -64,7 +59,7 @@ namespace AndreTurismoApp.CityService.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -85,12 +80,12 @@ namespace AndreTurismoApp.CityService.Controllers
         [HttpPost]
         public async Task<ActionResult<City>> PostCity(City city)
         {
-          if (_context.City == null)
-          {
-              return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
-          }
-            _context.City.Add(city);
-            await _context.SaveChangesAsync();
+            if (_context.City == null)
+            {
+                return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
+            }
+            _ = _context.City.Add(city);
+            _ = await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCity", new { id = city.Id }, city);
         }
@@ -103,14 +98,14 @@ namespace AndreTurismoApp.CityService.Controllers
             {
                 return NotFound();
             }
-            var city = await _context.City.FindAsync(id);
+            City? city = await _context.City.FindAsync(id);
             if (city == null)
             {
                 return NotFound();
             }
 
-            _context.City.Remove(city);
-            await _context.SaveChangesAsync();
+            _ = _context.City.Remove(city);
+            _ = await _context.SaveChangesAsync();
 
             return NoContent();
         }

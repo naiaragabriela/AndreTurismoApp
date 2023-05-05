@@ -1,7 +1,7 @@
 ﻿using AndreTurismoApp.AddressService.Data;
 using AndreTurismoApp.AddressService.Models;
+using AndreTurismoApp.ExternalService;
 using AndreTurismoApp.Models;
-using AndreTurismoApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +28,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return new List<Address>();
             }
 
-            var context = _context.Address.Include(a => a.City).AsQueryable();
+            IQueryable<Address> context = _context.Address.Include(a => a.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(cep))
             {
@@ -45,7 +45,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 context = context.Where(x => x.Neighborhood.Equals(neighborhood));
             }
 
-            return await  context.ToListAsync();
+            return await context.ToListAsync();
         }
 
 
@@ -58,7 +58,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return NotFound();
             }
 
-            var address = await _context.Address.Include(a => a.City).Where(a => a.Id == id).SingleOrDefaultAsync();
+            Address? address = await _context.Address.Include(a => a.City).Where(a => a.Id == id).SingleOrDefaultAsync();
 
             return address == null ? (ActionResult<Address>)NotFound() : (ActionResult<Address>)address;
         }
@@ -68,7 +68,7 @@ namespace AndreTurismoApp.AddressService.Controllers
         public async Task<ActionResult> PutAddress(int id, AddressPutRequestDTO request)
         {
 
-            var address = await _context.Address.FindAsync(id);
+            Address? address = await _context.Address.FindAsync(id);
 
             if (address == null)
             {
@@ -82,7 +82,7 @@ namespace AndreTurismoApp.AddressService.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -114,7 +114,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
             }
 
-           var post = await PostOfficesService.GetAddress(request.PostalCode);
+            AndreTurismoApp.Models.DTO.AddressDTO post = await PostOfficesService.GetAddress(request.PostalCode);
 
             Address address = new()
             {
@@ -126,9 +126,9 @@ namespace AndreTurismoApp.AddressService.Controllers
                 CityId = request.CityId,
             };
 
-            _context.Address.Add(address);
+            _ = _context.Address.Add(address);
 
-             await _context.SaveChangesAsync();
+            _ = await _context.SaveChangesAsync();
 
             AddressResponseDTO response = new()
             {
@@ -147,16 +147,16 @@ namespace AndreTurismoApp.AddressService.Controllers
             {
                 return NotFound();
             }
-            var address = await _context.Address.FindAsync(id);
+            Address? address = await _context.Address.FindAsync(id);
 
             if (address == null)
             {
                 return NotFound();
             }
 
-             _context.Address.Remove(address);
+            _ = _context.Address.Remove(address);
 
-             await _context.SaveChangesAsync();
+            _ = await _context.SaveChangesAsync();
 
             return NoContent();
         }

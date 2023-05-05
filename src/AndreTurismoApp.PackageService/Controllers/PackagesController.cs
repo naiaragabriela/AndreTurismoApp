@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AndreTurismoApp.Models;
+using AndreTurismoApp.PackageService.Data;
+using AndreTurismoApp.PackageService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AndreTurismoApp.Models;
-using AndreTurismoApp.PackageService.Data;
-using System.Net.Sockets;
-using AndreTurismoApp.PackageService.Models;
 
 namespace AndreTurismoApp.PackageService.Controllers
 {
@@ -31,7 +25,7 @@ namespace AndreTurismoApp.PackageService.Controllers
             {
                 return new List<Package>();
             }
-            var context = _context.Package
+            IQueryable<Package> context = _context.Package
                   .Include(package => package.Hotel)
                   .ThenInclude(hotel => hotel.Address)
                   .ThenInclude(address => address.City)
@@ -51,7 +45,7 @@ namespace AndreTurismoApp.PackageService.Controllers
                 context = context.Where(x => x.Hotel.Name.Equals(nameHotel));
             }
 
-            if (ticketId != 0 && ticketId != null)
+            if (ticketId is not 0 and not null)
             {
                 context = context.Where(x => x.Ticket.Id.Equals(ticketId));
             }
@@ -73,7 +67,7 @@ namespace AndreTurismoApp.PackageService.Controllers
             {
                 return NotFound();
             }
-            var package = await _context.Package
+            Package? package = await _context.Package
                   .Include(package => package.Hotel)
                   .ThenInclude(hotel => hotel.Address)
                   .ThenInclude(address => address.City)
@@ -86,7 +80,7 @@ namespace AndreTurismoApp.PackageService.Controllers
                   .Include(package => package.Client)
                   .ThenInclude(client => client.Address)
                   .ThenInclude(address => address.City)
-                  .Where(package=> package.Id == id)
+                  .Where(package => package.Id == id)
                   .SingleOrDefaultAsync();
 
             return package == null ? (ActionResult<Package>)NotFound() : (ActionResult<Package>)package;
@@ -102,7 +96,7 @@ namespace AndreTurismoApp.PackageService.Controllers
                 return BadRequest();
             }
 
-            var package = await _context.Package.FindAsync(id);
+            Package? package = await _context.Package.FindAsync(id);
 
             if (package == null)
             {
@@ -115,7 +109,7 @@ namespace AndreTurismoApp.PackageService.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -142,21 +136,21 @@ namespace AndreTurismoApp.PackageService.Controllers
                 return Problem("Entity set 'AndreTurismoAppPackageServiceContext.Package'  is null.");
             }
 
-            Package package = new Package()
+            Package package = new()
             {
                 HotelId = request.HotelId,
-                ClientId = request.ClientId,
+                CustomerId = request.CustomerId,
                 TicketId = request.TicketId,
                 Cost = request.Cost
             };
 
-            _context.Package.Add(package);
-            await _context.SaveChangesAsync();
+            _ = _context.Package.Add(package);
+            _ = await _context.SaveChangesAsync();
 
             Package response = new()
             {
                 Id = package.Id,
-                ClientId = package.ClientId,
+                CustomerId = package.CustomerId,
             };
 
             return CreatedAtAction("GetPackage", new { id = package.Id }, response);
@@ -170,14 +164,14 @@ namespace AndreTurismoApp.PackageService.Controllers
             {
                 return NotFound();
             }
-            var package = await _context.Package.FindAsync(id);
+            Package? package = await _context.Package.FindAsync(id);
             if (package == null)
             {
                 return NotFound();
             }
 
-            _context.Package.Remove(package);
-            await _context.SaveChangesAsync();
+            _ = _context.Package.Remove(package);
+            _ = await _context.SaveChangesAsync();
 
             return NoContent();
         }

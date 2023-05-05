@@ -35,9 +35,9 @@
 
         #region Properties
         public int Id { get; set; }
-        public Address Origin { get; set; }
+        public Address? Origin { get; set; }
         public int OriginId { get; set; }
-        public Address Destination { get; set; }
+        public Address? Destination { get; set; }
         public int DestinationId { get; set; }
         public DateTime DtRegistration { get; set; }
         public decimal Cost { get; set; }

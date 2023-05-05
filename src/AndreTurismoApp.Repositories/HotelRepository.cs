@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 using AndreTurismoApp.Models;
 using Dapper;
 
@@ -11,20 +6,20 @@ namespace AndreTurismoApp.Repositories
 {
     public class HotelRepository : IHotelRepository
     {
-        readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
+        private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
 
         public int Add(Hotel hotel)
         {
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
                 result = (int)db.ExecuteScalar(Hotel.INSERT, new
                 {
-                    Name = hotel.Name,
-                    Cost = hotel.Cost,
-                    DtRegistration = hotel.DtRegistration,
+                    hotel.Name,
+                    hotel.Cost,
+                    hotel.DtRegistration,
                     IdAddress = hotel.Address.Id
                 });
             }
@@ -38,10 +33,10 @@ namespace AndreTurismoApp.Repositories
 
         public List<Hotel> GetAll()
         {
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                var hotel = db.Query<Hotel, Address, City, Hotel>(Hotel.SELECT, (hotel, address, city) =>
+                IEnumerable<Hotel> hotel = db.Query<Hotel, Address, City, Hotel>(Hotel.SELECT, (hotel, address, city) =>
                 {
                     address.City = city;
                     hotel.Address = address;
@@ -56,14 +51,14 @@ namespace AndreTurismoApp.Repositories
         {
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
                 result = (int)db.ExecuteScalar(Hotel.UPDATE, new
                 {
-                    Name = hotel.Name,
-                    Cost = hotel.Cost,
-                    DtRegistration = hotel.DtRegistration,
+                    hotel.Name,
+                    hotel.Cost,
+                    hotel.DtRegistration,
                     IdAddress = hotel.Address.Id
                 });
             }

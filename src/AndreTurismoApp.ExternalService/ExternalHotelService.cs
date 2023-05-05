@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using AndreTurismoApp.Models;
 using Newtonsoft.Json;
 
@@ -12,19 +7,19 @@ namespace AndreTurismoApp.ExternalService
 {
     public class ExternalHotelService
     {
-        static readonly HttpClient hotels = new HttpClient();
+        private static readonly HttpClient hotels = new();
 
         public async Task<List<Hotel>> GetHotel()
         {
             try
             {
                 HttpResponseMessage response = await hotels.GetAsync("https://localhost:8080/api/Hotels");
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<List<Hotel>>(ender);
+                List<Hotel>? end = JsonConvert.DeserializeObject<List<Hotel>>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return new List<Hotel>();
             }
@@ -34,12 +29,12 @@ namespace AndreTurismoApp.ExternalService
             try
             {
                 HttpResponseMessage response = await hotels.GetAsync("https://localhost:8080/api/Hotels" + id);
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<Hotel>(ender);
+                Hotel? end = JsonConvert.DeserializeObject<Hotel>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return null;
             }

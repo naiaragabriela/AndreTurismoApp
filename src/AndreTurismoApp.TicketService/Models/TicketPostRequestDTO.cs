@@ -1,6 +1,4 @@
-﻿using AndreTurismoApp.Models;
-
-namespace AndreTurismoApp.TicketService.Models
+﻿namespace AndreTurismoApp.TicketService.Models
 {
     public class TicketPostRequestDTO
     {

@@ -20,65 +20,61 @@ namespace AndreTurismoApp.Teste
                 .Options;
 
             // Insert data into the database using one instance of the context
-            using (var context = new AndreTurismoAppAddressServiceContext(options))
+            using AndreTurismoAppAddressServiceContext context = new(options);
+            _ = context.Address.Add(new Address
             {
-                context.Address.Add(new Address
-                {
-                    Id = 1,
-                    Street = "Avenida Augusto Ferreira",
-                    PostalCode = "15991528",
-                    Number = 260,
-                    Neighborhood = "Nova Cidade",
-                    Complement = " ",
-                    CityId = 1,
-                    City = new City() { Id = 1, Name = "Matão" }
-                });
+                Id = 1,
+                Street = "Avenida Augusto Ferreira",
+                PostalCode = "15991528",
+                Number = 260,
+                Neighborhood = "Nova Cidade",
+                Complement = " ",
+                CityId = 1,
+                City = new City() { Id = 1, Name = "Matï¿½o" }
+            });
 
-                context.Address.Add(new Address
-                {
-                    Id = 2,
-                    Street = "Rua Alessio Santini",
-                    PostalCode = "14804021",
-                    Number = 260,
-                    Neighborhood = "Jardim Paraíso",
-                    Complement = " ",
-                    CityId = 2,
-                    City = new City() { Id = 2, Name = "Araraquara" }
-                });
-                context.Address.Add(new Address
-                {
-                    Id = 3,
-                    Street = "Rua Paulo Chioda",
-                    PostalCode = "14890238",
-                    Number = 235,
-                    Neighborhood = "Jardim Morumbi",
-                    Complement = " ",
-                    CityId = 3,
-                    City = new City() { Id = 3, Name = "Jaboticabal" }
-                });
-                context.SaveChanges();
-            }
+            _ = context.Address.Add(new Address
+            {
+                Id = 2,
+                Street = "Rua Alessio Santini",
+                PostalCode = "14804021",
+                Number = 260,
+                Neighborhood = "Jardim Paraï¿½so",
+                Complement = " ",
+                CityId = 2,
+                City = new City() { Id = 2, Name = "Araraquara" }
+            });
+            _ = context.Address.Add(new Address
+            {
+                Id = 3,
+                Street = "Rua Paulo Chioda",
+                PostalCode = "14890238",
+                Number = 235,
+                Neighborhood = "Jardim Morumbi",
+                Complement = " ",
+                CityId = 3,
+                City = new City() { Id = 3, Name = "Jaboticabal" }
+            });
+            _ = context.SaveChanges();
         }
 
         [Theory]
         [InlineData("Araraquara")]
-        [InlineData("Matão")]
+        [InlineData("Matï¿½o")]
         public async Task ShouldBe_ReturnSucess_WhenCall_GetAddressByCity(string city)
         {
 
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppAddressServiceContext(options))
-            {
-                var postalCode = string.Empty;
-                var neighborhood = string.Empty;
+            using AndreTurismoAppAddressServiceContext context = new(options);
+            string postalCode = string.Empty;
+            string neighborhood = string.Empty;
 
-                var addressController = new AddressesController(context);
-                var address = await addressController.GetAddress(postalCode, city, neighborhood);
+            AddressesController addressController = new(context);
+            ActionResult<IEnumerable<Address>> address = await addressController.GetAddress(postalCode, city, neighborhood);
 
-                Assert.Equal(1, address.Value?.Count());
-            }
+            Assert.Equal(1, address.Value?.Count());
         }
 
         [Fact]
@@ -87,13 +83,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppAddressServiceContext(options))
-            {
-                var clientId = 2;
-                var clientController = new AddressesController(context);
-                var client = await clientController.GetAddress(clientId);
-                Assert.Equal(2, client.Value?.Id);
-            }
+            using AndreTurismoAppAddressServiceContext context = new(options);
+            int CustomerId = 2;
+            AddressesController clientController = new(context);
+            ActionResult<Address> client = await clientController.GetAddress(CustomerId);
+            Assert.Equal(2, client.Value?.Id);
         }
 
         [Fact]
@@ -101,7 +95,7 @@ namespace AndreTurismoApp.Teste
         {
             InitializeDataBase();
 
-            AddressPostRequestDTO address = new ()
+            AddressPostRequestDTO address = new()
             {
 
                 Number = 20,
@@ -111,13 +105,11 @@ namespace AndreTurismoApp.Teste
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppAddressServiceContext(options))
-            {
-                var addressController = new AddressesController(context);
-                var response = await addressController.PostAddress(address);
-                var result = response.Result as CreatedAtActionResult;
-                Assert.NotNull(result?.Value);
-            }
+            using AndreTurismoAppAddressServiceContext context = new(options);
+            AddressesController addressController = new(context);
+            ActionResult<Address> response = await addressController.PostAddress(address);
+            CreatedAtActionResult? result = response.Result as CreatedAtActionResult;
+            Assert.NotNull(result?.Value);
         }
 
 
@@ -126,20 +118,18 @@ namespace AndreTurismoApp.Teste
         {
             InitializeDataBase();
 
-            AddressPutRequestDTO address = new ()
+            AddressPutRequestDTO address = new()
             {
                 Number = 10,
-                Complement =  " ",
+                Complement = " ",
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppAddressServiceContext(options))
-            {
-                var addressController = new AddressesController(context);
-                var response = await addressController.PutAddress(3, address);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
+            using AndreTurismoAppAddressServiceContext context = new(options);
+            AddressesController addressController = new(context);
+            ActionResult response = await addressController.PutAddress(3, address);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
         }
 
         [Fact]
@@ -148,13 +138,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppAddressServiceContext(options))
-            {
-                var addressController = new AddressesController(context);
-                var response = await addressController.DeleteAddress(2);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
+            using AndreTurismoAppAddressServiceContext context = new(options);
+            AddressesController addressController = new(context);
+            ActionResult response = await addressController.DeleteAddress(2);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
         }
     }
 }

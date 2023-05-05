@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AndreTurismoApp.Models;
+﻿using AndreTurismoApp.Models;
 using AndreTurismoApp.Repositories;
 
 namespace AndreTurismoApp.Services
@@ -17,18 +12,18 @@ namespace AndreTurismoApp.Services
             _clientRepository = new ClientRepository();
         }
 
-        public int Add(Client client)
+        public int Add(Customer client)
         {
             return _clientRepository.Add(client);
         }
 
-        public List<Client> GetAll()
+        public List<Customer> GetAll()
         {
             return _clientRepository.GetAll();
         }
 
 
-        public bool Update(Client client)
+        public bool Update(Customer client)
         {
             return _clientRepository.Update(client);
         }

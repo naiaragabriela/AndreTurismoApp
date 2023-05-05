@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AndreTurismoApp.Models;
+using AndreTurismoApp.TicketService.Data;
+using AndreTurismoApp.TicketService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AndreTurismoApp.Models;
-using AndreTurismoApp.TicketService.Data;
-using System.Net.Sockets;
-using AndreTurismoApp.TicketService.Models;
 
 namespace AndreTurismoApp.TicketService.Controllers
 {
@@ -25,15 +19,15 @@ namespace AndreTurismoApp.TicketService.Controllers
 
         // GET: api/Tickets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(string? postalCodeOrigin, string? cityOrigin, 
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(string? postalCodeOrigin, string? cityOrigin,
             string? postalCodeDestination, string? cityDestination)
         {
             if (_context.Ticket == null)
             {
                 return new List<Ticket>();
             }
-            var context = _context.Ticket.Include(ticket => ticket.Origin).ThenInclude(origin=> origin.City)
-                .Include(x => x.Destination).ThenInclude(destination =>destination.City).AsQueryable();
+            IQueryable<Ticket> context = _context.Ticket.Include(ticket => ticket.Origin).ThenInclude(origin => origin.City)
+                .Include(x => x.Destination).ThenInclude(destination => destination.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(postalCodeOrigin))
             {
@@ -66,7 +60,7 @@ namespace AndreTurismoApp.TicketService.Controllers
             {
                 return NotFound();
             }
-            var ticket = await _context.Ticket
+            Ticket? ticket = await _context.Ticket
                 .Include(ticket => ticket.Origin)
                 .ThenInclude(origin => origin.City)
                 .Include(ticket => ticket.Destination)
@@ -75,10 +69,10 @@ namespace AndreTurismoApp.TicketService.Controllers
                 .SingleOrDefaultAsync();
 
             return ticket == null ? (ActionResult<Ticket>)NotFound() : (ActionResult<Ticket>)ticket;
-        } 
+        }
 
         // PUT: api/Tickets/5
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTicket(int id, TicketPutRequestDTO request)
         {
@@ -87,7 +81,7 @@ namespace AndreTurismoApp.TicketService.Controllers
                 return BadRequest();
             }
 
-            var ticket = await _context.Ticket.FindAsync(id);
+            Ticket? ticket = await _context.Ticket.FindAsync(id);
 
 
             if (ticket == null)
@@ -95,13 +89,13 @@ namespace AndreTurismoApp.TicketService.Controllers
                 return NotFound("ID invalido!!");
             }
 
-            ticket.Cost = request.Cost; 
+            ticket.Cost = request.Cost;
 
             _context.Entry(ticket).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -127,15 +121,15 @@ namespace AndreTurismoApp.TicketService.Controllers
                 return Problem("Entity set 'AndreTurismoAppTicketServiceContext.Ticket'  is null.");
             }
 
-            Ticket ticket = new Ticket()
+            Ticket ticket = new()
             {
                 OriginId = request.OriginId,
                 DestinationId = request.DestinationId,
                 Cost = request.Cost,
             };
 
-            _context.Ticket.Add(ticket);
-            await _context.SaveChangesAsync();
+            _ = _context.Ticket.Add(ticket);
+            _ = await _context.SaveChangesAsync();
 
             Ticket response = new()
             {
@@ -153,14 +147,14 @@ namespace AndreTurismoApp.TicketService.Controllers
             {
                 return NotFound();
             }
-            var ticket = await _context.Ticket.FindAsync(id);
+            Ticket? ticket = await _context.Ticket.FindAsync(id);
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            _context.Ticket.Remove(ticket);
-            await _context.SaveChangesAsync();
+            _ = _context.Ticket.Remove(ticket);
+            _ = await _context.SaveChangesAsync();
 
             return NoContent();
         }

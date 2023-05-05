@@ -1,6 +1,6 @@
 using AndreTurismoApp.ExternalService;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
@@ -9,18 +9,18 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ExternalAddressService>();
 builder.Services.AddSingleton<ExternalCityService>();
-builder.Services.AddSingleton<ExternalClientService>();
+builder.Services.AddSingleton<ExternalCustomerService>();
 builder.Services.AddSingleton<ExternalHotelService>();
 builder.Services.AddSingleton<ExternalTicketService>();
 builder.Services.AddSingleton<ExternalPackageService>();
 builder.Services.AddSingleton<ExternalTicketService>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using AndreTurismoApp.ClientService.Data;
-using AndreTurismoApp.ExternalService;
+﻿using AndreTurismoApp.ClientService.Data;
+using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AndreTurismoAppClientServiceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AndreTurismoAppClientServiceContext") ?? throw new InvalidOperationException("Connection string 'AndreTurismoAppClientServiceContext' not found.")));
 
@@ -14,13 +12,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

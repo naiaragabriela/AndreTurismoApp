@@ -4,16 +4,15 @@ using Dapper;
 
 namespace AndreTurismoApp.Repositories
 {
-    public class CityRepository: ICityRepository
+    public class CityRepository : ICityRepository
     {
-
-        readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
+        private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
 
         public int Add(City city)
         {
             int result = 0;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
                 result = (int)db.ExecuteScalar(City.INSERT, city);
@@ -23,23 +22,21 @@ namespace AndreTurismoApp.Repositories
 
         public List<City> GetAll()
         {
-            using (var db = new SqlConnection(strConn))
-            {
-                db.Open();
-                var city = db.Query<City>(City.SELECT);
-                return (List<City>)city;
-            }
+            using SqlConnection db = new(strConn);
+            db.Open();
+            IEnumerable<City> city = db.Query<City>(City.SELECT);
+            return (List<City>)city;
         }
 
         public bool Update(City city)
         {
             bool result = false;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                db.Execute(City.UPDATE, city);
-                result = false;          
+                _ = db.Execute(City.UPDATE, city);
+                result = false;
             }
             return result;
 
@@ -49,10 +46,10 @@ namespace AndreTurismoApp.Repositories
         {
             bool result = false;
 
-            using (var db = new SqlConnection(strConn))
+            using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                db.Execute(City.DELETE, id);
+                _ = db.Execute(City.DELETE, id);
                 result = true;
             }
             return result;

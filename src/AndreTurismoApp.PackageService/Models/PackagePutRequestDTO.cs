@@ -1,6 +1,4 @@
-﻿using AndreTurismoApp.Models;
-
-namespace AndreTurismoApp.PackageService.Models
+﻿namespace AndreTurismoApp.PackageService.Models
 {
     public class PackagePutRequestDTO
     {

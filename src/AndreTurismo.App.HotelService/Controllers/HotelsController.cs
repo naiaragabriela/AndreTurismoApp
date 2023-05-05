@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AndreTurismo.App.HotelService.Data;
+using AndreTurismo.App.HotelService.Models;
+using AndreTurismoApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AndreTurismo.App.HotelService.Data;
-using AndreTurismoApp.Models;
-using AndreTurismo.App.HotelService.Models;
 
 namespace AndreTurismo.App.HotelService.Controllers
 {
@@ -30,7 +25,7 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return new List<Hotel>();
             }
-            var context = _context.Hotel.Include(hotel => hotel.Address).ThenInclude(address=>address.City).AsQueryable();
+            IQueryable<Hotel> context = _context.Hotel.Include(hotel => hotel.Address).ThenInclude(address => address.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -58,7 +53,7 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return NotFound();
             }
-            var hotel = await _context.Hotel
+            Hotel? hotel = await _context.Hotel
                 .Include(hotel => hotel.Address)
                 .ThenInclude(address => address.City)
                 .Where(hotel => hotel.Id == id)
@@ -68,7 +63,7 @@ namespace AndreTurismo.App.HotelService.Controllers
         }
 
         // PUT: api/Hotels/5
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, HotelPutRequestDTO request)
         {
@@ -77,7 +72,7 @@ namespace AndreTurismo.App.HotelService.Controllers
                 return BadRequest();
             }
 
-            var hotel = await _context.Hotel.FindAsync(id);
+            Hotel? hotel = await _context.Hotel.FindAsync(id);
 
             if (hotel == null)
             {
@@ -91,7 +86,7 @@ namespace AndreTurismo.App.HotelService.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                _ = await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -109,7 +104,7 @@ namespace AndreTurismo.App.HotelService.Controllers
         }
 
         // POST: api/Hotels
-        
+
         [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(HotelPostRequestDTO request)
         {
@@ -117,7 +112,7 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return Problem("Entity set 'AndreTurismoAppHotelServiceContext.Hotel'  is null.");
             }
-            Hotel hotel = new Hotel()
+            Hotel hotel = new()
             {
                 Name = request.Name,
                 Cost = request.Cost,
@@ -130,8 +125,8 @@ namespace AndreTurismo.App.HotelService.Controllers
                 Name = hotel.Name
             };
 
-            _context.Hotel.Add(hotel);
-            await _context.SaveChangesAsync();
+            _ = _context.Hotel.Add(hotel);
+            _ = await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetHotel", new { id = hotel.Id }, response);
         }
@@ -144,15 +139,15 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return NotFound();
             }
-            var hotel = await _context.Hotel.FindAsync(id);
+            Hotel? hotel = await _context.Hotel.FindAsync(id);
 
             if (hotel == null)
             {
                 return NotFound();
             }
 
-            _context.Hotel.Remove(hotel);
-            await _context.SaveChangesAsync();
+            _ = _context.Hotel.Remove(hotel);
+            _ = await _context.SaveChangesAsync();
 
             return NoContent();
         }

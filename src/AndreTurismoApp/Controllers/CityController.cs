@@ -1,7 +1,5 @@
 ﻿using AndreTurismoApp.ExternalService;
 using AndreTurismoApp.Models;
-using AndreTurismoApp.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AndreTurismoApp.Controllers
@@ -16,10 +14,10 @@ namespace AndreTurismoApp.Controllers
             _cityService = service;
         }
 
-        [HttpPost( Name = "InsertCity")]
-        public async Task<ActionResult>Add(City city)
+        [HttpPost(Name = "InsertCity")]
+        public async Task<ActionResult> Add(City city)
         {
-            var statusCode = (int)await _cityService.PostCity(city);
+            int statusCode = (int)await _cityService.PostCity(city);
 
             return StatusCode(statusCode);
         }
@@ -27,23 +25,23 @@ namespace AndreTurismoApp.Controllers
         [HttpGet(Name = "GetAllCity")]
         public async Task<List<City>> GetAll()
         {
-            var response = await _cityService.GetCity();
+            List<City> response = await _cityService.GetCity();
 
             return response;
         }
 
         [HttpPut(Name = "UpdateCity")]
-        public async Task<ActionResult>Update(City city)
+        public async Task<ActionResult> Update(City city)
         {
-            var statusCode = (int)await _cityService.PutCity(city);
+            int statusCode = (int)await _cityService.PutCity(city);
 
             return StatusCode(statusCode);
         }
 
         [HttpDelete(Name = "DeleteCity")]
-        public async Task<ActionResult>Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var statusCode = (int)await _cityService.DeleteCity(id);
+            int statusCode = (int)await _cityService.DeleteCity(id);
 
             return StatusCode(statusCode);
         }

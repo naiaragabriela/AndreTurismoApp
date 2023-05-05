@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using AndreTurismoApp.Models;
 using Newtonsoft.Json;
 
@@ -12,19 +7,18 @@ namespace AndreTurismoApp.ExternalService
 {
     public class ExternalPackageService
     {
-
-        static readonly HttpClient packages = new HttpClient();
+        private static readonly HttpClient packages = new();
         public async Task<List<Package>> GetPackage()
         {
             try
             {
                 HttpResponseMessage response = await packages.GetAsync("https://localhost:8084/api/Packages");
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<List<Package>>(ender);
+                List<Package>? end = JsonConvert.DeserializeObject<List<Package>>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return new List<Package>();
             }
@@ -34,12 +28,12 @@ namespace AndreTurismoApp.ExternalService
             try
             {
                 HttpResponseMessage response = await packages.GetAsync("https://localhost:8084/api/Packages/" + id);
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
                 string ender = await response.Content.ReadAsStringAsync();
-                var end = JsonConvert.DeserializeObject<Package>(ender);
+                Package? end = JsonConvert.DeserializeObject<Package>(ender);
                 return end;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 return null;
             }

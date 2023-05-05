@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AndreTurismoApp.Models;
+﻿using AndreTurismoApp.Models;
 
 namespace AndreTurismoApp.Repositories
 {
     public interface IClientRepository
     {
-        
-    
-        int Add(Client client);
 
-        List<Client> GetAll();
 
-        bool Update(Client client);
+        int Add(Customer client);
+
+        List<Customer> GetAll();
+
+        bool Update(Customer client);
 
         bool Delete(int id);
 

@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AndreTurismoApp.AddressService.Controllers;
-using AndreTurismoApp.AddressService.Data;
-using AndreTurismoApp.AddressService.Models;
-using AndreTurismoApp.CityService.Controllers;
+﻿using AndreTurismoApp.CityService.Controllers;
 using AndreTurismoApp.CityService.Data;
-using AndreTurismoApp.ClientService.Data;
 using AndreTurismoApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,28 +19,26 @@ namespace AndreTurismoApp.Teste
                 .Options;
 
             // Insert data into the database using one instance of the context
-            using (var context = new AndreTurismoAppCityServiceContext(options))
+            using AndreTurismoAppCityServiceContext context = new(options);
+            _ = context.City.Add(new City
             {
-                context.City.Add(new City
-                {
-                    Id = 1, 
-                    Name = "Matão" 
-                });
+                Id = 1,
+                Name = "Matão"
+            });
 
-                context.City.Add(new City
-                {
-                    Id = 2,
-                    Name = "Araraquara"
-                });
+            _ = context.City.Add(new City
+            {
+                Id = 2,
+                Name = "Araraquara"
+            });
 
-                context.City.Add(new City
-                {
-                    Id = 3,
-                    Name = "Jaboticabal"
-                });
+            _ = context.City.Add(new City
+            {
+                Id = 3,
+                Name = "Jaboticabal"
+            });
 
-                context.SaveChanges();
-            }
+            _ = context.SaveChanges();
         }
 
         [Theory]
@@ -61,13 +50,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppCityServiceContext(options))
-            { 
-                var cityController = new CitiesController(context);
-                var address = await cityController.GetCity(city);
+            using AndreTurismoAppCityServiceContext context = new(options);
+            CitiesController cityController = new(context);
+            ActionResult<IEnumerable<City>> address = await cityController.GetCity(city);
 
-                Assert.Equal(1, address.Value?.Count());
-            }
+            Assert.Equal(1, address.Value?.Count());
         }
 
         [Fact]
@@ -76,13 +63,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppCityServiceContext(options))
-            {
-                var cityId = 2;
-                var cityController = new CitiesController(context);
-                var city = await cityController.GetCity(cityId);
-                Assert.Equal(2, city.Value?.Id);
-            }
+            using AndreTurismoAppCityServiceContext context = new(options);
+            int cityId = 2;
+            CitiesController cityController = new(context);
+            ActionResult<City> city = await cityController.GetCity(cityId);
+            Assert.Equal(2, city.Value?.Id);
         }
 
         [Fact]
@@ -98,13 +83,11 @@ namespace AndreTurismoApp.Teste
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppCityServiceContext(options))
-            {
-                var cityController = new CitiesController(context);
-                var response = await cityController.PostCity(city);
-                var result = response.Result as CreatedAtActionResult;
-                Assert.NotNull(result?.Value);
-            }
+            using AndreTurismoAppCityServiceContext context = new(options);
+            CitiesController cityController = new(context);
+            ActionResult<City> response = await cityController.PostCity(city);
+            CreatedAtActionResult? result = response.Result as CreatedAtActionResult;
+            Assert.NotNull(result?.Value);
         }
 
 
@@ -120,13 +103,11 @@ namespace AndreTurismoApp.Teste
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppCityServiceContext(options))
-            {
-                var cityController = new CitiesController(context);
-                var response = await cityController.PutCity(4,city);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
+            using AndreTurismoAppCityServiceContext context = new(options);
+            CitiesController cityController = new(context);
+            IActionResult response = await cityController.PutCity(4, city);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
         }
 
         [Fact]
@@ -135,13 +116,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppCityServiceContext(options))
-            {
-                var cityController = new CitiesController(context);
-                var response = await cityController.DeleteCity(2);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
+            using AndreTurismoAppCityServiceContext context = new(options);
+            CitiesController cityController = new(context);
+            IActionResult response = await cityController.DeleteCity(2);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
         }
 
     }

@@ -49,14 +49,14 @@ JOIN [City] CityDestination ON [AddressDestination].IdCity = [CityDestination].I
 
         #region Properties
         public int Id { get; set; }
-        public Hotel Hotel { get; set; }
+        public Hotel? Hotel { get; set; }
         public int HotelId { get; set; }
-        public Ticket Ticket { get; set; }
+        public Ticket? Ticket { get; set; }
         public int TicketId { get; set; }
         public DateTime DtRegistration { get; set; }
         public decimal Cost { get; set; }
-        public Client Client { get; set; }
-        public int ClientId { get; set; }
+        public Customer? Client { get; set; }
+        public int CustomerId { get; set; }
         #endregion
 
         #region Methods

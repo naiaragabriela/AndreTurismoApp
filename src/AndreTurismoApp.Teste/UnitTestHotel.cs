@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AndreTurismo.App.HotelService.Controllers;
+﻿using AndreTurismo.App.HotelService.Controllers;
 using AndreTurismo.App.HotelService.Data;
 using AndreTurismo.App.HotelService.Models;
-using AndreTurismoApp.ClientService.Controllers;
-using AndreTurismoApp.ClientService.Data;
-using AndreTurismoApp.ClientService.Models;
 using AndreTurismoApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,54 +20,52 @@ namespace AndreTurismoApp.Teste
             .Options;
 
 
-            using (var context = new AndreTurismoAppHotelServiceContext(options))
+            using AndreTurismoAppHotelServiceContext context = new(options);
+            _ = context.Hotel.Add(new Hotel
             {
-                context.Hotel.Add(new Hotel
+                Id = 1,
+                Name = "Hotel Ibis",
+                Cost = 200,
+                Address = new()
                 {
                     Id = 1,
-                    Name = "Hotel Ibis",
-                    Cost = 200,
-                    Address = new()
+                    Street = "Rua Paulo Chioda",
+                    PostalCode = "14890238",
+                    Number = 235,
+                    Neighborhood = "Jardim Morumbi",
+                    Complement = " ",
+                    CityId = 3,
+                    City = new City()
                     {
-                        Id = 1,
-                        Street = "Rua Paulo Chioda",
-                        PostalCode = "14890238",
-                        Number = 235,
-                        Neighborhood = "Jardim Morumbi",
-                        Complement = " ",
-                        CityId = 3,
-                        City = new City()
-                        {
-                            Id = 3,
-                            Name = "Jaboticabal"
-                        }
+                        Id = 3,
+                        Name = "Jaboticabal"
                     }
-                });
+                }
+            });
 
-                context.Hotel.Add(new Hotel
+            _ = context.Hotel.Add(new Hotel
+            {
+                Id = 2,
+                Name = "Hotel Flórida",
+                Cost = 250,
+                Address = new()
                 {
                     Id = 2,
-                    Name = "Hotel Flórida",
-                    Cost = 250,
-                    Address = new()
+                    Street = "Rua Alessio Santini",
+                    PostalCode = "14804021",
+                    Number = 260,
+                    Neighborhood = "Jardim Paraíso",
+                    Complement = " ",
+                    CityId = 2,
+                    City = new City()
                     {
                         Id = 2,
-                        Street = "Rua Alessio Santini",
-                        PostalCode = "14804021",
-                        Number = 260,
-                        Neighborhood = "Jardim Paraíso",
-                        Complement = " ",
-                        CityId = 2,
-                        City = new City()
-                        {
-                            Id = 2,
-                            Name = "Araraquara"
-                        }
+                        Name = "Araraquara"
                     }
-                });
+                }
+            });
 
-                context.SaveChanges();
-            }
+            _ = context.SaveChanges();
         }
 
         [Fact]
@@ -84,15 +74,13 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppHotelServiceContext(options))
-            {
-                var hotelId = 2;
-                var hotelController = new HotelsController(context);
-                var hotel = await hotelController.GetHotel(hotelId);
-                Assert.Equal(2, hotel.Value?.Id);
-            }
+            using AndreTurismoAppHotelServiceContext context = new(options);
+            int hotelId = 2;
+            HotelsController hotelController = new(context);
+            ActionResult<Hotel> hotel = await hotelController.GetHotel(hotelId);
+            Assert.Equal(2, hotel.Value?.Id);
         }
-       
+
         [Fact]
         public async void ShouldBe_ReturnSucess_WhenCall_PostHotel()
         {
@@ -107,13 +95,11 @@ namespace AndreTurismoApp.Teste
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppHotelServiceContext(options))
-            {
-                var hotelController = new HotelsController(context);
-                var response = await hotelController.PostHotel(hotel);
-                var result = response.Result as CreatedAtActionResult;
-                Assert.NotNull(result?.Value);
-            }
+            using AndreTurismoAppHotelServiceContext context = new(options);
+            HotelsController hotelController = new(context);
+            ActionResult<Hotel> response = await hotelController.PostHotel(hotel);
+            CreatedAtActionResult? result = response.Result as CreatedAtActionResult;
+            Assert.NotNull(result?.Value);
         }
 
         [Fact]
@@ -129,13 +115,11 @@ namespace AndreTurismoApp.Teste
             };
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppHotelServiceContext(options))
-            {
-                var hotelController = new HotelsController(context);
-                var response = await hotelController.PutHotel(1, hotel);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
+            using AndreTurismoAppHotelServiceContext context = new(options);
+            HotelsController hotelController = new(context);
+            IActionResult response = await hotelController.PutHotel(1, hotel);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
         }
 
         [Fact]
@@ -144,13 +128,11 @@ namespace AndreTurismoApp.Teste
             InitializeDataBase();
 
             // Use a clean instance of the context to run the test
-            using (var context = new AndreTurismoAppHotelServiceContext(options))
-            {
-                var hotelController = new HotelsController(context);
-                var response = await hotelController.DeleteHotel(2);
-                var result = response as NoContentResult;
-                Assert.NotNull(result);
-            }
-        } 
+            using AndreTurismoAppHotelServiceContext context = new(options);
+            HotelsController hotelController = new(context);
+            IActionResult response = await hotelController.DeleteHotel(2);
+            NoContentResult? result = response as NoContentResult;
+            Assert.NotNull(result);
+        }
     }
 }
