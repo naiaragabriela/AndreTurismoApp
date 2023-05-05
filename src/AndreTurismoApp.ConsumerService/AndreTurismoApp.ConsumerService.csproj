@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AndreTurismoApp.Models\AndreTurismoApp.Models.csproj" />
+    <ProjectReference Include="..\AndreTurismoApp.Rabbit\AndreTurismoApp.Rabbit.csproj" />
+    <ProjectReference Include="..\AndreTurismoApp.Repositories\AndreTurismoApp.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>

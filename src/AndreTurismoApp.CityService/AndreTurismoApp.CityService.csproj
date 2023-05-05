@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AndreTurismoApp.Models\AndreTurismoApp.Models.csproj" />
+    <ProjectReference Include="..\AndreTurismoApp.Rabbit\AndreTurismoApp.Rabbit.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,9 @@
 ﻿using AndreTurismoApp.CityService.Data;
 using AndreTurismoApp.Models;
+using AndreTurismoApp.Rabbit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AndreTurismoApp.CityService.Controllers
 {
@@ -10,10 +12,11 @@ namespace AndreTurismoApp.CityService.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly AndreTurismoAppCityServiceContext _context;
-
-        public CitiesController(AndreTurismoAppCityServiceContext context)
+        private readonly Producer _producer;
+        public CitiesController(AndreTurismoAppCityServiceContext context, Producer producer)
         {
             _context = context;
+            _producer = producer;
         }
 
         // GET: api/Cities
@@ -47,6 +50,7 @@ namespace AndreTurismoApp.CityService.Controllers
 
             return city == null ? NotFound() : city;
         }
+
 
         // PUT: api/Cities/5
         [HttpPut("{id}")]
@@ -87,10 +91,14 @@ namespace AndreTurismoApp.CityService.Controllers
                 return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
             }
 
-            _context.City.Add(city);
-            await _context.SaveChangesAsync();
+            //_context.City.Add(city);
+            //await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.Id }, city);
+            _producer.Send("city", JsonConvert.SerializeObject(city));
+
+            //return CreatedAtAction("GetCity", new { id = city.Id }, city);
+
+            return Accepted();
         }
 
         // DELETE: api/Cities/5

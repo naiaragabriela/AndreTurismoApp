@@ -6,7 +6,7 @@ namespace AndreTurismoApp.Repositories
 {
     public class CityRepository : ICityRepository
     {
-        private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
+        private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\AndreTurismoApp\database\TourismAgency.mdf";
 
         public int Add(City city)
         {
