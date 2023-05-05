@@ -36,7 +36,7 @@ namespace AndreTurismoApp.Repositories
             using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                IEnumerable<Hotel> hotel = db.Query<Hotel, Address, City, Hotel>(Hotel.SELECT, (hotel, address, city) =>
+                var hotel = db.Query<Hotel, Address, City, Hotel>(Hotel.SELECT, (hotel, address, city) =>
                 {
                     address.City = city;
                     hotel.Address = address;
@@ -59,7 +59,7 @@ namespace AndreTurismoApp.Repositories
                     hotel.Name,
                     hotel.Cost,
                     hotel.DtRegistration,
-                    IdAddress = hotel.Address.Id
+                    AddressId = hotel.Address.Id
                 });
             }
             return result;

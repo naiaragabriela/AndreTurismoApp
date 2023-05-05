@@ -36,7 +36,7 @@ namespace AndreTurismoApp.Repositories
             {
                 db.Open();
 
-                IEnumerable<Address> address = db.Query<Address, City, Address>(Address.SELECT, (address, city) =>
+                var address = db.Query<Address, City, Address>(Address.SELECT, (address, city) =>
                 {
                     address.City = city;
                     return address;
@@ -55,7 +55,7 @@ namespace AndreTurismoApp.Repositories
             using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                _ = db.Execute(Address.DELETE, id);
+                db.Execute(Address.DELETE, id);
                 result = true;
             }
             return result;
@@ -70,7 +70,7 @@ namespace AndreTurismoApp.Repositories
             using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                _ = db.Execute(Address.UPDATE, new
+                 db.Execute(Address.UPDATE, new
                 {
                     address.Street,
                     address.Number,
@@ -78,7 +78,7 @@ namespace AndreTurismoApp.Repositories
                     address.PostalCode,
                     address.Complement,
                     address.DtRegistration,
-                    IdCity = address.City.Id
+                    CityId = address.City.Id
                 });
                 result = true;
             }

@@ -2,9 +2,8 @@
 
 namespace AndreTurismoApp.Repositories
 {
-    public interface IClientRepository
+    public interface ICustomerRepository
     {
-
 
         int Add(Customer client);
 

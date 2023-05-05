@@ -28,7 +28,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return new List<Address>();
             }
 
-            IQueryable<Address> context = _context.Address.Include(a => a.City).AsQueryable();
+            var context = _context.Address.Include(a => a.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(cep))
             {
@@ -58,9 +58,9 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return NotFound();
             }
 
-            Address? address = await _context.Address.Include(a => a.City).Where(a => a.Id == id).SingleOrDefaultAsync();
+            var address = await _context.Address.Include(a => a.City).Where(a => a.Id == id).SingleOrDefaultAsync();
 
-            return address == null ? (ActionResult<Address>)NotFound() : (ActionResult<Address>)address;
+            return address == null ? NotFound() : address;
         }
 
         // PUT: api/Addresses/5
@@ -68,7 +68,7 @@ namespace AndreTurismoApp.AddressService.Controllers
         public async Task<ActionResult> PutAddress(int id, AddressPutRequestDTO request)
         {
 
-            Address? address = await _context.Address.FindAsync(id);
+           var address = await _context.Address.FindAsync(id);
 
             if (address == null)
             {
@@ -82,7 +82,7 @@ namespace AndreTurismoApp.AddressService.Controllers
 
             try
             {
-                _ = await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -126,9 +126,9 @@ namespace AndreTurismoApp.AddressService.Controllers
                 CityId = request.CityId,
             };
 
-            _ = _context.Address.Add(address);
+            _context.Address.Add(address);
 
-            _ = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             AddressResponseDTO response = new()
             {
@@ -147,16 +147,17 @@ namespace AndreTurismoApp.AddressService.Controllers
             {
                 return NotFound();
             }
-            Address? address = await _context.Address.FindAsync(id);
+            
+            var address = await _context.Address.FindAsync(id);
 
             if (address == null)
             {
                 return NotFound();
             }
 
-            _ = _context.Address.Remove(address);
+             _context.Address.Remove(address);
 
-            _ = await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
 
             return NoContent();
         }

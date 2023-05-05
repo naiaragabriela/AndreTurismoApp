@@ -25,7 +25,8 @@ namespace AndreTurismoApp.PackageService.Controllers
             {
                 return new List<Package>();
             }
-            IQueryable<Package> context = _context.Package
+
+            var context = _context.Package
                   .Include(package => package.Hotel)
                   .ThenInclude(hotel => hotel.Address)
                   .ThenInclude(address => address.City)
@@ -67,7 +68,8 @@ namespace AndreTurismoApp.PackageService.Controllers
             {
                 return NotFound();
             }
-            Package? package = await _context.Package
+
+           var package = await _context.Package
                   .Include(package => package.Hotel)
                   .ThenInclude(hotel => hotel.Address)
                   .ThenInclude(address => address.City)
@@ -96,7 +98,7 @@ namespace AndreTurismoApp.PackageService.Controllers
                 return BadRequest();
             }
 
-            Package? package = await _context.Package.FindAsync(id);
+            var package = await _context.Package.FindAsync(id);
 
             if (package == null)
             {
@@ -109,7 +111,7 @@ namespace AndreTurismoApp.PackageService.Controllers
 
             try
             {
-                _ = await _context.SaveChangesAsync();
+                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -144,8 +146,8 @@ namespace AndreTurismoApp.PackageService.Controllers
                 Cost = request.Cost
             };
 
-            _ = _context.Package.Add(package);
-            _ = await _context.SaveChangesAsync();
+             _context.Package.Add(package);
+            await _context.SaveChangesAsync();
 
             Package response = new()
             {
@@ -170,8 +172,8 @@ namespace AndreTurismoApp.PackageService.Controllers
                 return NotFound();
             }
 
-            _ = _context.Package.Remove(package);
-            _ = await _context.SaveChangesAsync();
+            _context.Package.Remove(package);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

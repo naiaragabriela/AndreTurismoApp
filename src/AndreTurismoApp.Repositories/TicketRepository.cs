@@ -44,7 +44,7 @@ namespace AndreTurismoApp.Repositories
             using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                IEnumerable<Ticket> ticket = db.Query<Ticket, Address, City, Address, City, Ticket>(Ticket.SELECT, (ticket, addressOrigin, cityOrigin,
+                var ticket = db.Query<Ticket, Address, City, Address, City, Ticket>(Ticket.SELECT, (ticket, addressOrigin, cityOrigin,
                     addressDestination, cityDestination) =>
                 {
                     addressOrigin.City = cityOrigin;
@@ -68,8 +68,8 @@ namespace AndreTurismoApp.Repositories
                 db.Open();
                 result = (int)db.ExecuteScalar(Ticket.UPDATE, new
                 {
-                    IdOrigin = ticket.Origin.Id,
-                    IdDestination = ticket.Destination.Id,
+                    OriginId = ticket.Origin.Id,
+                    DestinationId = ticket.Destination.Id,
                     ticket.DtRegistration,
                     ticket.Cost
 

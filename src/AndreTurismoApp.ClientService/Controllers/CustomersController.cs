@@ -21,12 +21,12 @@ namespace AndreTurismoApp.ClientService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers(string? name, string? cep, string? city)
         {
-            if (_context.Client == null)
+            if (_context.Customer == null)
             {
                 return new List<Customer>();
             }
 
-            IQueryable<Customer> context = _context.Client.Include(x => x.Address).ThenInclude(address => address.City).AsQueryable();
+           var context = _context.Customer.Include(x => x.Address).ThenInclude(address => address.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -35,12 +35,12 @@ namespace AndreTurismoApp.ClientService.Controllers
 
             if (!string.IsNullOrEmpty(cep))
             {
-                context = context.Where(x => x.Address.PostalCode.Equals(cep));
+                context = context.Where(x => x.Address!.PostalCode.Equals(cep));
             }
 
             if (!string.IsNullOrEmpty(city))
             {
-                context = context.Where(x => x.Address.City.Name.Equals(city));
+                context = context.Where(x => x.Address!.City!.Name.Equals(city));
             }
 
             return await context.ToListAsync();
@@ -50,11 +50,12 @@ namespace AndreTurismoApp.ClientService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomerById(int id)
         {
-            if (_context.Client == null)
+            if (_context.Customer == null)
             {
                 return NotFound();
             }
-            Customer? client = await _context.Client
+
+            var client = await _context.Customer
                 .Include(client => client.Address)
                 .ThenInclude(address => address.City)
                 .Where(client => client.Id == id)
@@ -65,14 +66,14 @@ namespace AndreTurismoApp.ClientService.Controllers
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, ClientPutRequestDTO request)
+        public async Task<IActionResult> PutCustomer(int id, CustomerPutRequestDTO request)
         {
             if (request == null)
             {
                 return BadRequest();
             }
 
-            Customer? client = await _context.Client.FindAsync(id);
+            var client = await _context.Customer.FindAsync(id);
 
             if (client == null)
             {
@@ -83,13 +84,14 @@ namespace AndreTurismoApp.ClientService.Controllers
             client.Phone = request.Phone;
 
             _context.Entry(client).State = EntityState.Modified;
+
             try
             {
-                _ = await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClientExists(id))
+                if (!CustomerExists(id))
                 {
                     return NotFound();
                 }
@@ -103,9 +105,9 @@ namespace AndreTurismoApp.ClientService.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(ClientPostRequestDTO? request)
+        public async Task<ActionResult<Customer>> PostCustomer(CustomerPostRequestDTO? request)
         {
-            if (_context.Client == null)
+            if (_context.Customer == null)
             {
                 return Problem("Entity set 'AndreTurismoAppClientServiceContext.Client'  is null.");
             }
@@ -117,11 +119,11 @@ namespace AndreTurismoApp.ClientService.Controllers
                 AddressId = request.AddressId,
             };
 
-            _ = _context.Client.Add(client);
-            _ = await _context.SaveChangesAsync();
+            _context.Customer.Add(client);
+            await _context.SaveChangesAsync();
 
 
-            ClientResponseDTO response = new()
+            CustomerResponseDTO response = new()
             {
                 Id = client.Id,
                 Name = client.Name
@@ -134,26 +136,27 @@ namespace AndreTurismoApp.ClientService.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            if (_context.Client == null)
+            if (_context.Customer == null)
             {
                 return NotFound();
             }
-            Customer? client = await _context.Client.FindAsync(id);
+
+            var client = await _context.Customer.FindAsync(id);
 
             if (client == null)
             {
                 return NotFound();
             }
 
-            _ = _context.Client.Remove(client);
-            _ = await _context.SaveChangesAsync();
+            _context.Customer.Remove(client);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ClientExists(int id)
+        private bool CustomerExists(int id)
         {
-            return (_context.Client?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Customer?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

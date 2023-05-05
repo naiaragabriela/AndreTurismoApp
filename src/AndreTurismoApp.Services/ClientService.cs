@@ -5,11 +5,11 @@ namespace AndreTurismoApp.Services
 {
     public class ClientService
     {
-        private readonly IClientRepository _clientRepository;
+        private readonly ICustomerRepository _clientRepository;
 
         public ClientService()
         {
-            _clientRepository = new ClientRepository();
+            _clientRepository = new CustomerRepository();
         }
 
         public int Add(Customer client)

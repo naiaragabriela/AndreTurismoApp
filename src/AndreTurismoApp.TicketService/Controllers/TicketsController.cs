@@ -19,15 +19,23 @@ namespace AndreTurismoApp.TicketService.Controllers
 
         // GET: api/Tickets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(string? postalCodeOrigin, string? cityOrigin,
-            string? postalCodeDestination, string? cityDestination)
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket(
+            string? postalCodeOrigin, 
+            string? cityOrigin,
+            string? postalCodeDestination, 
+            string? cityDestination)
         {
             if (_context.Ticket == null)
             {
                 return new List<Ticket>();
             }
-            IQueryable<Ticket> context = _context.Ticket.Include(ticket => ticket.Origin).ThenInclude(origin => origin.City)
-                .Include(x => x.Destination).ThenInclude(destination => destination.City).AsQueryable();
+
+            var context = _context.Ticket
+                .Include(ticket => ticket.Origin)
+                .ThenInclude(origin => origin.City)
+                .Include(x => x.Destination).
+                ThenInclude(destination => destination.City)
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(postalCodeOrigin))
             {
@@ -60,7 +68,8 @@ namespace AndreTurismoApp.TicketService.Controllers
             {
                 return NotFound();
             }
-            Ticket? ticket = await _context.Ticket
+
+           var ticket = await _context.Ticket
                 .Include(ticket => ticket.Origin)
                 .ThenInclude(origin => origin.City)
                 .Include(ticket => ticket.Destination)
@@ -68,7 +77,7 @@ namespace AndreTurismoApp.TicketService.Controllers
                 .Where(ticket => ticket.Id == id)
                 .SingleOrDefaultAsync();
 
-            return ticket == null ? (ActionResult<Ticket>)NotFound() : (ActionResult<Ticket>)ticket;
+            return ticket == null ? NotFound() : ticket;
         }
 
         // PUT: api/Tickets/5
@@ -81,7 +90,7 @@ namespace AndreTurismoApp.TicketService.Controllers
                 return BadRequest();
             }
 
-            Ticket? ticket = await _context.Ticket.FindAsync(id);
+            var ticket = await _context.Ticket.FindAsync(id);
 
 
             if (ticket == null)
@@ -95,7 +104,7 @@ namespace AndreTurismoApp.TicketService.Controllers
 
             try
             {
-                _ = await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -128,8 +137,8 @@ namespace AndreTurismoApp.TicketService.Controllers
                 Cost = request.Cost,
             };
 
-            _ = _context.Ticket.Add(ticket);
-            _ = await _context.SaveChangesAsync();
+            _context.Ticket.Add(ticket);
+            await _context.SaveChangesAsync();
 
             Ticket response = new()
             {
@@ -147,14 +156,16 @@ namespace AndreTurismoApp.TicketService.Controllers
             {
                 return NotFound();
             }
-            Ticket? ticket = await _context.Ticket.FindAsync(id);
+
+            var ticket = await _context.Ticket.FindAsync(id);
+            
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            _ = _context.Ticket.Remove(ticket);
-            _ = await _context.SaveChangesAsync();
+            _context.Ticket.Remove(ticket);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

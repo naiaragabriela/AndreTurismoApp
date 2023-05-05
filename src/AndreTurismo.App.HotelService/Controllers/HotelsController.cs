@@ -25,7 +25,8 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return new List<Hotel>();
             }
-            IQueryable<Hotel> context = _context.Hotel.Include(hotel => hotel.Address).ThenInclude(address => address.City).AsQueryable();
+
+            var context = _context.Hotel.Include(hotel => hotel.Address).ThenInclude(address => address.City).AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -53,7 +54,8 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return NotFound();
             }
-            Hotel? hotel = await _context.Hotel
+
+            var hotel = await _context.Hotel
                 .Include(hotel => hotel.Address)
                 .ThenInclude(address => address.City)
                 .Where(hotel => hotel.Id == id)
@@ -72,7 +74,7 @@ namespace AndreTurismo.App.HotelService.Controllers
                 return BadRequest();
             }
 
-            Hotel? hotel = await _context.Hotel.FindAsync(id);
+            var hotel = await _context.Hotel.FindAsync(id);
 
             if (hotel == null)
             {
@@ -86,7 +88,7 @@ namespace AndreTurismo.App.HotelService.Controllers
 
             try
             {
-                _ = await _context.SaveChangesAsync();
+                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -112,6 +114,7 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return Problem("Entity set 'AndreTurismoAppHotelServiceContext.Hotel'  is null.");
             }
+
             Hotel hotel = new()
             {
                 Name = request.Name,
@@ -125,8 +128,8 @@ namespace AndreTurismo.App.HotelService.Controllers
                 Name = hotel.Name
             };
 
-            _ = _context.Hotel.Add(hotel);
-            _ = await _context.SaveChangesAsync();
+             _context.Hotel.Add(hotel);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetHotel", new { id = hotel.Id }, response);
         }
@@ -139,15 +142,16 @@ namespace AndreTurismo.App.HotelService.Controllers
             {
                 return NotFound();
             }
-            Hotel? hotel = await _context.Hotel.FindAsync(id);
+            
+            var hotel = await _context.Hotel.FindAsync(id);
 
             if (hotel == null)
             {
                 return NotFound();
             }
 
-            _ = _context.Hotel.Remove(hotel);
-            _ = await _context.SaveChangesAsync();
+            _context.Hotel.Remove(hotel);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

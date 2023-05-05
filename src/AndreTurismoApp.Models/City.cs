@@ -14,12 +14,10 @@
         public static readonly string DELETE = "DELETE FROM CITY WHERE Id = @Id";
         #endregion
 
-
-
         #region Properties
 
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; } = "";
         public DateTime DtRegistration { get; set; }
         #endregion
 

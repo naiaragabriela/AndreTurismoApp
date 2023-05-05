@@ -9,6 +9,6 @@ namespace AndreTurismoApp.ClientService.Data
         {
         }
 
-        public DbSet<AndreTurismoApp.Models.Customer> Client { get; set; } = default!;
+        public DbSet<AndreTurismoApp.Models.Customer> Customer { get; set; } = default!;
     }
 }

@@ -21,7 +21,7 @@ namespace AndreTurismoApp.Teste
 
 
             using AndreTurismoAppClientServiceContext context = new(options);
-            _ = context.Client.Add(new Customer
+            _ = context.Customer.Add(new Customer
             {
                 Id = 1,
                 Name = "Simone",
@@ -44,7 +44,7 @@ namespace AndreTurismoApp.Teste
                 }
             });
 
-            _ = context.Client.Add(new Customer
+            _ = context.Customer.Add(new Customer
             {
                 Id = 2,
                 Name = "Naiara",
@@ -87,7 +87,7 @@ namespace AndreTurismoApp.Teste
         {
             InitializeDataBase();
 
-            ClientPostRequestDTO client = new()
+            CustomerPostRequestDTO client = new()
             {
                 Name = "Ana",
                 Phone = "33845678",
@@ -107,7 +107,7 @@ namespace AndreTurismoApp.Teste
         {
             InitializeDataBase();
 
-            ClientPutRequestDTO client = new()
+            CustomerPutRequestDTO client = new()
             {
                 Name = "Gustavo",
                 Phone = "12345678",

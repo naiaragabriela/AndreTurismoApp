@@ -22,10 +22,12 @@ namespace AndreTurismoApp.Repositories
 
         public List<City> GetAll()
         {
-            using SqlConnection db = new(strConn);
-            db.Open();
-            IEnumerable<City> city = db.Query<City>(City.SELECT);
-            return (List<City>)city;
+            using (SqlConnection db = new(strConn))
+            {
+                db.Open();
+                var city = db.Query<City>(City.SELECT);
+                return (List<City>)city;
+            }
         }
 
         public bool Update(City city)
@@ -35,7 +37,7 @@ namespace AndreTurismoApp.Repositories
             using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                _ = db.Execute(City.UPDATE, city);
+                db.Execute(City.UPDATE, city);
                 result = false;
             }
             return result;
@@ -49,7 +51,7 @@ namespace AndreTurismoApp.Repositories
             using (SqlConnection db = new(strConn))
             {
                 db.Open();
-                _ = db.Execute(City.DELETE, id);
+                db.Execute(City.DELETE, id);
                 result = true;
             }
             return result;

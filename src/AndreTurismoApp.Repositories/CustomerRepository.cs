@@ -4,7 +4,7 @@ using Dapper;
 
 namespace AndreTurismoApp.Repositories
 {
-    public class ClientRepository : IClientRepository
+    public class CustomerRepository : ICustomerRepository
     {
         private readonly string strConn = @"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;AttachDbFileName=C:\Users\adm\source\repos\projeto-agencia-turismo-ADO\src\banco\TourismAgencyADO.mdf";
 
@@ -20,7 +20,7 @@ namespace AndreTurismoApp.Repositories
                     client.Name,
                     client.Phone,
                     client.DtRegistration,
-                    IdAddress = client.Address.Id,
+                    AddressId = client.Address.Id,
                 });
             }
             return result;

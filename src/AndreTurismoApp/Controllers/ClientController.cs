@@ -27,6 +27,7 @@ namespace AndreTurismoApp.Controllers
         public async Task<List<Customer>> GetAll()
         {
             List<Customer> response = await _clientService.GetCustomers();
+
             return response;
         }
 

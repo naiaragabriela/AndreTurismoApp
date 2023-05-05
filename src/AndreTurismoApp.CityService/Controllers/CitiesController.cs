@@ -24,13 +24,14 @@ namespace AndreTurismoApp.CityService.Controllers
             {
                 return NotFound();
             }
-            IQueryable<City> context = _context.City.AsQueryable();
+
+            var context = _context.City.AsQueryable();
 
             if (!string.IsNullOrEmpty(city))
             {
                 context = context.Where(x => x.Name.Contains(city));
             }
-            return await _context.City.ToListAsync();
+            return await context.ToListAsync();
         }
 
         // GET: api/Cities/5
@@ -41,9 +42,10 @@ namespace AndreTurismoApp.CityService.Controllers
             {
                 return NotFound();
             }
-            City? city = await _context.City.FindAsync(id);
 
-            return city == null ? (ActionResult<City>)NotFound() : (ActionResult<City>)city;
+            var city = await _context.City.FindAsync(id);
+
+            return city == null ? NotFound() : city;
         }
 
         // PUT: api/Cities/5
@@ -59,7 +61,7 @@ namespace AndreTurismoApp.CityService.Controllers
 
             try
             {
-                _ = await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -84,8 +86,9 @@ namespace AndreTurismoApp.CityService.Controllers
             {
                 return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
             }
-            _ = _context.City.Add(city);
-            _ = await _context.SaveChangesAsync();
+
+            _context.City.Add(city);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCity", new { id = city.Id }, city);
         }
@@ -98,14 +101,16 @@ namespace AndreTurismoApp.CityService.Controllers
             {
                 return NotFound();
             }
-            City? city = await _context.City.FindAsync(id);
+
+            var city = await _context.City.FindAsync(id);
+           
             if (city == null)
             {
                 return NotFound();
             }
 
-            _ = _context.City.Remove(city);
-            _ = await _context.SaveChangesAsync();
+            _context.City.Remove(city);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
